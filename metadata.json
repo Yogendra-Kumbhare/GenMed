@@ -1,0 +1,6 @@
+{
+  "name": "GenericMed Patient & Caregiver Portal",
+  "description": "Patient & Caregiver Web Portal for GenericMed featuring medicine cabinet, smart dose tracking, generic savings, order live tracking, and dependent management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
