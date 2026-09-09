@@ -315,10 +315,10 @@ Connect GenericMed to external healthcare systems, insurance providers, and comm
 ### Deliverables
 
 #### 5.1 — Pharmacy Network Integration
-- [ ] Pharmacy locator with map view
-- [ ] Prescription transfer between pharmacies
-- [ ] Real-time drug pricing from partner pharmacies
-- [ ] Preferred pharmacy setting per user
+- [x] Pharmacy locator with map view
+- [x] Prescription transfer between pharmacies
+- [x] Real-time drug pricing from partner pharmacies
+- [x] Preferred pharmacy setting per user
 
 #### 5.2 — Insurance & HSA Integration
 - [ ] Insurance card scanning and storage

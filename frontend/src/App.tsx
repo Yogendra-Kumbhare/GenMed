@@ -34,6 +34,7 @@ const DependentsPage = lazy(() => import('./components/pages/DependentsPage').th
 const NotificationsPage = lazy(() => import('./components/pages/NotificationsPage').then(m => ({ default: m.NotificationsPage })));
 const SettingsPage = lazy(() => import('./components/pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
 const AnalyticsPage = lazy(() => import('./components/pages/AnalyticsPage').then(m => ({ default: m.AnalyticsPage })));
+const PharmaciesPage = lazy(() => import('./components/pages/PharmaciesPage').then(m => ({ default: m.PharmaciesPage })));
 import { RefillModal } from './components/modals/RefillModal';
 import { UploadRxModal } from './components/modals/UploadRxModal';
 import { MedicationDetailModal } from './components/modals/MedicationDetailModal';
@@ -76,7 +77,7 @@ export default function App() {
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     const authFlag = localStorage.getItem('genericmed_is_authenticated');
-    return authFlag !== 'false';
+    return authFlag === 'true';
   });
 
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -608,6 +609,16 @@ export default function App() {
             <AnalyticsPage
               dependents={dependents}
               activeDependent={activeDependent}
+            />
+          )}
+
+          {currentPage === 'pharmacies' && (
+            <PharmaciesPage
+              onNavigate={(page) => {
+                setCurrentPage(page);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              onOpenUploadRx={() => setIsUploadRxOpen(true)}
             />
           )}
           </Suspense>

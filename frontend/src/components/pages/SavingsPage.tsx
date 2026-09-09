@@ -65,7 +65,7 @@ export const SavingsPage: React.FC<SavingsPageProps> = ({ onNavigate, onOpenUplo
               Gold Tier Smart Saver
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1.5">
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight mt-1.5">
             Generic Savings & Drug Price Comparator
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 mt-1">
@@ -104,7 +104,7 @@ export const SavingsPage: React.FC<SavingsPageProps> = ({ onNavigate, onOpenUplo
             </span>
             <Percent className="w-5 h-5 text-teal-700" />
           </div>
-          <div className="text-3xl font-black text-teal-800">84% Off</div>
+          <div className="text-3xl font-black text-slate-900 dark:text-white">84% Off</div>
           <p className="text-[11px] text-slate-500 pt-1">
             Patients save an average of $118 per 90-day maintenance prescription.
           </p>
@@ -117,7 +117,7 @@ export const SavingsPage: React.FC<SavingsPageProps> = ({ onNavigate, onOpenUplo
             </span>
             <TrendingDown className="w-5 h-5 text-emerald-600" />
           </div>
-          <div className="text-3xl font-black text-slate-900">$2,150.00</div>
+          <div className="text-3xl font-black text-slate-900 dark:text-white">$2,150.00</div>
           <p className="text-[11px] text-slate-500 pt-1">
             Estimated annual savings for Eleanor, Arthur, and Leo combined.
           </p>

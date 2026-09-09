@@ -13,6 +13,7 @@ import {
   Sparkles,
   X,
   BarChart2,
+  MapPin,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PageId } from '../types';
@@ -50,6 +51,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'savings' as PageId, label: t('nav.savings'), icon: TrendingDown, badge: '84% Avg', badgeColor: 'bg-teal-100 text-teal-800 border-teal-200 dark:bg-teal-900/40 dark:text-teal-300 dark:border-teal-700' },
     { id: 'dependents' as PageId, label: t('nav.dependents'), icon: Users, badge: '2 active', badgeColor: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600' },
     { id: 'notifications' as PageId, label: t('nav.notifications'), icon: Bell, badge: unreadNotifsCount > 0 ? `${unreadNotifsCount}` : null, badgeColor: 'bg-teal-700 text-white dark:bg-teal-600' },
+    { id: 'pharmacies' as PageId, label: t('nav.pharmacies'), icon: MapPin, badge: null },
     { id: 'analytics' as PageId, label: t('nav.analytics'), icon: BarChart2, badge: null },
     { id: 'settings' as PageId, label: t('nav.settings'), icon: Settings, badge: null },
   ];

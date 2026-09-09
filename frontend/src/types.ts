@@ -7,7 +7,8 @@ export type PageId =
   | 'dependents'
   | 'notifications'
   | 'settings'
-  | 'analytics';
+  | 'analytics'
+  | 'pharmacies';
 
 export interface UserProfile {
   id: string;

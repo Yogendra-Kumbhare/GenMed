@@ -27,7 +27,7 @@ interface AuthScreenProps {
 }
 
 export const AuthScreen: React.FC<AuthScreenProps> = ({ onLoginSuccess, demoUser }) => {
-  const [mode, setMode] = useState<'login' | 'register'>('login');
+  const [mode, setMode] = useState<'login' | 'register'>('register');
 
   // Login form state
   const [loginEmail, setLoginEmail] = useState('eleanor.vance@example.com');
@@ -182,12 +182,29 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onLoginSuccess, demoUser
       rxGroup: 'RXGENMED',
     };
 
-    // Save to localStorage
+    // Reset dependents list to start with ONLY the newly registered user (no fake family members)
+    const selfDependent = {
+      id: 'dep-self',
+      name: regName.trim(),
+      relationship: 'Self',
+      age: 35,
+      dob: regDob || '1990-01-01',
+      avatar: newProfile.avatar,
+      adherenceRate: 100,
+      activeMedsCount: 0,
+      urgentAlertsCount: 0,
+      primaryCondition: newProfile.primaryCondition,
+      primaryDoctor: newProfile.primaryDoctor,
+      doctorPhone: newProfile.doctorPhone,
+      emergencyContact: newProfile.emergencyContact,
+      emergencyPhone: newProfile.emergencyPhone,
+      hipaaAuthorized: true,
+      notes: 'Primary patient account.',
+    };
+
     try {
-      const storedUsersRaw = localStorage.getItem('genericmed_registered_users');
-      const storedUsers: UserProfile[] = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
-      storedUsers.push(newProfile);
-      localStorage.setItem('genericmed_registered_users', JSON.stringify(storedUsers));
+      localStorage.setItem('genericmed_dependents', JSON.stringify([selfDependent]));
+      localStorage.setItem('genericmed_registered_users', JSON.stringify([newProfile]));
     } catch {
       // ignore
     }
