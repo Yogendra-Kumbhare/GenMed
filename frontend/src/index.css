@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+/* ── Dark mode via class strategy ────────────────────────────────────────── */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Dark mode base overrides ────────────────────────────────────────────── */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}

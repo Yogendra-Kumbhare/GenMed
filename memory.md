@@ -17,7 +17,7 @@
 | **Target Users**  | Patients, Family Caregivers, Healthcare Proxies            |
 | **Deployment**    | Google AI Studio / Cloud Run                               |
 | **Repository**    | `Yogendra-Kumbhare/GenMed`                                 |
-| **Current Phase** | Phase 2 — Backend & Auth (Active)                          |
+| **Current Phase** | Phase 4 — Scale & Polish (Complete) / Phase 5 — Ecosystem Integration (Planned) |
 
 ---
 
@@ -40,6 +40,8 @@
 | **Security**     | `bcryptjs`                    | 3.x         |
 | **Dev Tooling**  | `concurrently`, `tsx`         | —           |
 | **Env Config**   | dotenv                        | 17.x        |
+| **Charts**       | Recharts                      | 3.x         |
+| **DB Adapter**   | `@prisma/adapter-pg`          | 7.x         |
 | **Package Mgr**  | npm                           | —           |
 
 ### Key Configuration
@@ -129,33 +131,46 @@
 
 ---
 
-## 🔲 Feature Status (Phase 2 In Progress)
+## 🔲 Feature Status (Phase 4 In Progress)
 
-### High Priority
-- [x] Backend architecture design (PostgreSQL, Supabase, Prisma ORM, Express REST API)
-- [x] Architecture Decision Records (ADR-008 through ADR-012)
-- [~] Database schema definition (`prisma/schema.prisma`); seed script remains
-- [~] JWT authentication (`requireAuth`); role-specific authorization remains
-- [~] Zod validation for authentication and medications; remaining endpoint schemas remain
-- [~] Express REST API: health, authentication, and medication listing/creation endpoints
-- [~] Vite dev proxy; frontend API client integration remains
-- [ ] Real-time order tracking with WebSockets
+### Completed in Phase 3
+- [x] Drug interaction checker — `POST /api/ai/interactions` + `DrugInteractionChecker` component in `MedicationDetailModal`
+- [x] Interaction severity levels: minor, moderate, major, contraindicated
+- [x] Adherence analytics page (`AnalyticsPage.tsx`) with Recharts v3 area + bar charts
+- [x] Per-dependent adherence breakdown and streak tracking
+- [x] Smart refill forecast — `GET /api/analytics/refill-forecast` + urgency-tiered supply table
+- [x] Pharmacist consultation history — `Consultation` Prisma model + `GET/POST/DELETE /api/consultations`
+- [x] Consultation history tab in `PharmacistConsultModal` with expand/delete
+- [x] Prescription OCR — `POST /api/ai/ocr` (Gemini multimodal) + real file input in `UploadRxModal`
+- [x] Analytics page wired into sidebar navigation and `App.tsx`
+- [x] Prisma v7 adapter pattern (`prisma.config.ts`, `@prisma/adapter-pg`)
+- [x] ADR-013: Phase 3 intelligence layer architecture
 
-### Medium Priority
-- [ ] Medication interaction checker
-- [ ] Adherence analytics with charts/graphs
-- [ ] Multi-language support (i18n)
-- [ ] Dark mode toggle
-- [ ] Push notifications (browser + mobile)
-- [ ] Medication schedule PDF export
-- [ ] Insurance claim submission
+### Phase 4 High Priority
+- [ ] Dark mode — theme toggle (light/dark/system), Tailwind dark variants, persist in user settings
+- [ ] Code splitting — `React.lazy` + `Suspense` for all page components
+- [ ] Refactor `App.tsx` (625 lines → context + custom hooks)
+- [ ] Refactor `SettingsPage.tsx` (47KB → sub-components)
+- [ ] PWA — service worker, app manifest, offline dose tracking
 
-### Low Priority
-- [ ] Caregiver delegation workflow
+### Phase 4 Medium Priority
+- [ ] Internationalization (i18n) — `react-i18next`, English + Spanish + Hindi
+- [ ] Push notifications — Browser Push API + server-side triggers
+- [ ] Accessibility audit — WCAG 2.1 AA, screen reader testing, focus management
+- [ ] Lighthouse score ≥ 90 on all metrics
+
+### Phase 4 Low Priority (Testing)
+- [ ] Vitest unit tests
+- [ ] React Testing Library component tests
+- [ ] Playwright E2E tests
+- [ ] CI/CD pipeline with test gates (≥ 80% coverage)
+
+### Deferred (Phase 5)
 - [ ] Pharmacy network finder
+- [ ] Insurance/HSA claim submission
 - [ ] Telehealth integration
 - [ ] Wearable device integration (Apple Health, Google Fit)
-- [ ] Unit / integration / E2E test suite
+- [ ] Caregiver delegation workflow
 
 ---
 
@@ -221,6 +236,21 @@
 | Method | Endpoint                        | Description                  | Auth / Roles | Zod Schema |
 | ------ | ------------------------------- | ---------------------------- | ------------ | ---------- |
 | POST   | `/api/ai/consult`               | Pharmacist AI consultation   | Bearer Token | `aiConsultSchema` |
+| POST   | `/api/ai/interactions`          | Drug interaction checker     | Bearer Token | `interactionCheckSchema` |
+| POST   | `/api/ai/ocr`                   | Prescription OCR extraction  | Bearer Token | `ocrSchema` |
+
+### Analytics
+| Method | Endpoint                              | Description                        | Auth / Roles | Zod Schema |
+| ------ | ------------------------------------- | ---------------------------------- | ------------ | ---------- |
+| GET    | `/api/analytics/adherence`            | Adherence report + streak stats    | Bearer Token | `adherenceQuerySchema` |
+| GET    | `/api/analytics/refill-forecast`      | Refill urgency forecast per med    | Bearer Token | `refillForecastQuerySchema` |
+
+### Consultations
+| Method | Endpoint                        | Description                  | Auth / Roles | Zod Schema |
+| ------ | ------------------------------- | ---------------------------- | ------------ | ---------- |
+| GET    | `/api/consultations`            | List consultation history    | Bearer Token | — |
+| POST   | `/api/consultations`            | Save consultation record     | Bearer Token | `consultationCreateSchema` |
+| DELETE | `/api/consultations/:id`        | Delete a consultation        | Bearer Token | — |
 
 ---
 
@@ -395,6 +425,14 @@ notifications
 ├── metadata (JSONB, nullable)
 ├── created_at (TIMESTAMP)
 └── read_at (TIMESTAMP, nullable)
+
+consultations                      ← Added Phase 3
+├── id (UUID, PK)
+├── user_id (UUID, FK → users)
+├── question (TEXT)
+├── answer (TEXT)
+├── medication_context (TEXT[])
+└── created_at (TIMESTAMP)
 ```
 
 ---
@@ -455,30 +493,47 @@ Processing → Pharmacist Review → Dispensed & Packed → Out for Delivery →
 
 | #  | Issue                                           | Severity | Status   |
 | -- | ----------------------------------------------- | -------- | -------- |
-| 1  | No backend — all data resets on localStorage clear | High   | By design (Phase 1) |
-| 2  | No real authentication — auth screen is cosmetic | High    | Planned for Phase 2  |
-| 3  | Order tracking map is mock (no live GPS)         | Medium   | Planned  |
-| 4  | No test suite                                    | Medium   | Planned  |
-| 5  | Large `App.tsx` (625 lines) — needs splitting    | Low      | Backlog  |
-| 6  | Settings page is very large (47KB) — needs refactor | Low   | Backlog  |
+| 1  | Large bundle (824 KB) — no code splitting yet   | High     | Phase 4  |
+| 2  | No test suite                                    | Medium   | Phase 4  |
+| 3  | Order tracking map is mock (no live GPS)         | Medium   | Phase 5  |
+| 4  | Large `App.tsx` (625 lines) — needs splitting    | Low      | Phase 4  |
+| 5  | Settings page is very large (47KB) — needs refactor | Low   | Phase 4  |
+| 6  | No dark mode                                     | Low      | Phase 4  |
 
 ---
 
 ## 🗺 Future Roadmap
 
-### Phase 2 — Backend & Auth
-- [ ] Set up Express API with database (PostgreSQL or Firestore)
-- [ ] Implement JWT authentication
-- [ ] Migrate mock data to database seeding
-- [ ] Connect frontend to live API endpoints
-- [ ] Real-time notifications via WebSocket
+### ✅ Phase 1 — Frontend MVP (Complete)
+- Full SPA with 8 pages, mock data, localStorage persistence, Gemini AI chat
 
-### Phase 3 — Intelligence & Analytics
-- [ ] Medication interaction checker (AI-powered)
-- [ ] Adherence analytics dashboard with charts
-- [ ] Smart refill predictions
-- [ ] Pharmacist consultation history
-- [ ] Prescription OCR upload
+### ✅ Phase 2 — Backend & Auth (Complete)
+- PostgreSQL + Supabase + Prisma ORM schema and seed
+- Express REST API — all entity endpoints
+- JWT authentication with RBAC, bcrypt password hashing
+- Zod validation, error handling middleware
+- Frontend API client, loading/error states, optimistic updates
+- WebSocket real-time notifications
+
+### ✅ Phase 3 — Intelligence & Analytics (Complete)
+- Drug interaction checker (`POST /api/ai/interactions`, `DrugInteractionChecker` component)
+- Adherence analytics page with Recharts v3 area + bar charts, streak tracking
+- Smart refill forecast (`GET /api/analytics/refill-forecast`) with urgency tiers
+- Consultation history (`Consultation` model, `GET/POST/DELETE /api/consultations`, history tab in modal)
+- Prescription OCR (`POST /api/ai/ocr`, Gemini multimodal, real file input in UploadRxModal)
+- `analytics` page added to sidebar and `PageId` type
+- Prisma v7 adapter pattern (`prisma.config.ts`, `@prisma/adapter-pg`)
+
+### 🔄 Phase 4 — Scale & Polish (Active)
+- [ ] Dark mode (light/dark/system toggle, Tailwind dark variants)
+- [ ] Code splitting (React.lazy + Suspense for all pages)
+- [ ] App.tsx refactor (context + custom hooks)
+- [ ] SettingsPage.tsx refactor (sub-components)
+- [ ] PWA (service worker, offline dose tracking)
+- [ ] i18n (react-i18next, English + Spanish + Hindi)
+- [ ] Push notifications (Browser Push API)
+- [ ] Accessibility audit (WCAG 2.1 AA)
+- [ ] Test suite (Vitest + RTL + Playwright)
 
 ### Phase 4 — Scale & Polish
 - [ ] Multi-language (i18n) support

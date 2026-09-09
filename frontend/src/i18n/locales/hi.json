@@ -1,0 +1,117 @@
+{
+  "nav": {
+    "dashboard": "डैशबोर्ड",
+    "cabinet": "दवा कैबिनेट",
+    "prescriptions": "नुस्खे",
+    "orders": "ऑर्डर और ट्रैकिंग",
+    "savings": "बचत",
+    "dependents": "आश्रित",
+    "notifications": "सूचनाएं",
+    "analytics": "विश्लेषण",
+    "settings": "सेटिंग्स"
+  },
+  "common": {
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "close": "बंद करें",
+    "delete": "हटाएं",
+    "edit": "संपादित करें",
+    "add": "जोड़ें",
+    "search": "खोजें",
+    "loading": "लोड हो रहा है…",
+    "error": "कुछ गलत हुआ",
+    "empty": "कोई आइटम नहीं मिला",
+    "confirm": "पुष्टि करें",
+    "back": "वापस",
+    "done": "हो गया",
+    "submit": "जमा करें",
+    "refresh": "रिफ्रेश करें",
+    "viewAll": "सभी देखें",
+    "learnMore": "और जानें"
+  },
+  "auth": {
+    "login": "साइन इन करें",
+    "register": "खाता बनाएं",
+    "logout": "साइन आउट करें",
+    "email": "ईमेल पता",
+    "password": "पासवर्ड",
+    "name": "पूरा नाम",
+    "welcomeBack": "वापस स्वागत है, {{name}}!"
+  },
+  "dashboard": {
+    "title": "आज का दवा कार्यक्रम",
+    "adherenceRate": "पालन दर",
+    "activeMeds": "सक्रिय दवाएं",
+    "dosesRemaining": "शेष खुराक",
+    "markTaken": "ली गई चिह्नित करें",
+    "markSkipped": "छोड़ी गई चिह्नित करें",
+    "morning": "सुबह",
+    "afternoon": "दोपहर",
+    "evening": "शाम",
+    "bedtime": "सोने का समय"
+  },
+  "cabinet": {
+    "title": "दवा कैबिनेट",
+    "addMedication": "दवा जोड़ें",
+    "daysLeft": "{{count}} दिन शेष",
+    "pillsLeft": "{{count}} गोलियां",
+    "refillsLeft": "{{count}} रिफिल",
+    "lowSupply": "कम आपूर्ति",
+    "requestRefill": "रिफिल अनुरोध करें"
+  },
+  "prescriptions": {
+    "title": "नुस्खे",
+    "uploadRx": "नुस्खा अपलोड करें",
+    "active": "सक्रिय",
+    "pendingRenewal": "नवीनीकरण लंबित",
+    "expiringSoon": "जल्द समाप्त",
+    "transferred": "स्थानांतरित"
+  },
+  "orders": {
+    "title": "ऑर्डर और ट्रैकिंग",
+    "orderNumber": "ऑर्डर #{{number}}",
+    "trackDelivery": "डिलीवरी ट्रैक करें",
+    "reorder": "फिर से ऑर्डर करें"
+  },
+  "savings": {
+    "title": "जेनेरिक बचत",
+    "youSave": "आप {{pct}}% बचाते हैं",
+    "brandPrice": "ब्रांड मूल्य",
+    "genericPrice": "जेनेरिक मूल्य"
+  },
+  "notifications": {
+    "title": "सूचनाएं",
+    "markAllRead": "सभी पढ़े चिह्नित करें",
+    "unread": "{{count}} अपठित"
+  },
+  "analytics": {
+    "title": "पालन और विश्लेषण",
+    "overallAdherence": "समग्र पालन",
+    "currentStreak": "वर्तमान लकीर",
+    "dosesTaken": "ली गई खुराक",
+    "refillForecast": "रिफिल पूर्वानुमान",
+    "days": "{{count}} दिन",
+    "streakDays": "{{count}} दिन की लकीर"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "profile": "प्रोफ़ाइल",
+    "preferences": "प्राथमिकताएं",
+    "theme": "थीम",
+    "language": "भाषा",
+    "autoRefill": "स्वतः रिफिल",
+    "genericSubstitution": "जेनेरिक प्रतिस्थापन",
+    "smsDoseReminders": "SMS खुराक अनुस्मारक",
+    "twoFactorAuth": "दो-कारक प्रमाणीकरण"
+  },
+  "theme": {
+    "light": "हल्का",
+    "dark": "गहरा",
+    "system": "सिस्टम"
+  },
+  "language": {
+    "en": "English",
+    "es": "Español",
+    "hi": "हिन्दी"
+  }
+}

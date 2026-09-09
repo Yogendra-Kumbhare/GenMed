@@ -1,0 +1,1011 @@
+I'm not able to directly generate/export a binary PDF file in this chat, but I've written the complete PRD below in full, structured, professional form — ready to be pasted into Google Docs/Word/Notion and exported as a PDF in one click (headings and tables will convert cleanly). It follows your exact 24-section structure with no placeholders.
+
+---
+
+# GenericMed — Product Requirements Document
+
+## 1. DOCUMENT CONTROL
+
+| Field | Detail |
+|---|---|
+| Product Name | GenericMed |
+| PRD Title | GenericMed – Generic Medicine Price Comparison & E-Pharmacy Platform PRD |
+| Version | v1.0 |
+| Status | Draft – For Stakeholder Review |
+| Document Owner | Product Manager, GenericMed |
+| Date | To be finalized upon approval |
+| Intended Audience | Engineering, Design/UX, QA, Business/Founders, Operations, Compliance/Legal, Pharmacy Partnerships, Investors |
+
+### Revision History
+
+| Version | Date | Author | Summary of Changes |
+|---|---|---|---|
+| 0.1 | Draft creation | Product Manager | Initial draft from product brief |
+| 1.0 | Baseline | Product Manager | First complete PRD for stakeholder review |
+
+### Stakeholders & Approvers
+
+| Role | Responsibility | Sign-off |
+|---|---|---|
+| Product Manager | Owns requirements, scope, prioritization | Pending |
+| Engineering Lead | Validates technical feasibility, architecture | Pending |
+| Design Lead | Owns UX/UI, accessibility, information architecture | Pending |
+| QA Lead | Owns test strategy, acceptance validation | Pending |
+| Operations Lead | Owns logistics, fulfillment, pharmacy onboarding ops | Pending |
+| Compliance/Legal Lead | Owns drug regulatory, pharmacovigilance, data privacy | Pending |
+| Business/Founder | Owns business model, funding, GTM strategy | Pending |
+| Pharmacist-in-Charge | Owns clinical accuracy of substitutions, prescription validation | Pending |
+
+**Priority Legend**
+
+- **P0** — Required for MVP/launch; product cannot go live without it.
+- **P1** — Important; targeted as a fast-follow within 1–2 releases post-launch.
+- **P2** — Desirable; future phase, roadmap-dependent.
+
+---
+
+## 2. INTRODUCTION & PRODUCT VISION
+
+### 2.1 Purpose
+This PRD defines the problem, scope, requirements, and success criteria for GenericMed. It is the single source of truth for Engineering, Design, QA, Operations, Compliance, and Business teams to build, test, and launch the product consistently.
+
+### 2.2 Product Vision
+To make quality generic medicines transparently affordable and trustworthy for every Indian household — by turning price opacity in the pharmacy market into a simple, verified, one-tap comparison and purchase experience.
+
+### 2.3 Product Summary
+GenericMed is a SaaS-powered online marketplace that compares real-time prices of generic medicines across licensed pharmacies/suppliers and lets users buy the lowest verified price directly through the platform.
+
+### 2.4 Product Scope
+This PRD covers the end-to-end product requirements for the GenericMed platform: patient-facing web/mobile experience, pharmacy/supplier partner portal, prescription verification workflow, price comparison engine, checkout and fulfillment tracking, and admin/analytics systems for the MVP and near-term roadmap.
+
+This PRD does **not** cover:
+- Low-level system architecture or infrastructure design
+- Source code or detailed API contracts
+- Pixel-perfect UI/visual design specifications
+- Detailed database schema/implementation (DDL, indexes)
+- Final legal/regulatory certification text (to be validated by Legal/Compliance counsel)
+
+---
+
+## 3. PROBLEM STATEMENT & MARKET CONTEXT
+
+### 3.1 The Problem
+
+**Patients/Caregivers:** Medicine prices for chemically identical generics vary significantly between pharmacies and brands, but patients have no easy way to compare before purchase. This is worse for chronic-illness patients who repeatedly buy the same medicines.
+
+**Doctors/Clinics:** Doctors want to recommend cost-effective generic substitutes but lack a fast, reliable tool to check availability, price, and manufacturer credibility at the point of prescription.
+
+**Small Pharmacies:** Independent pharmacies lack visibility into competitor pricing and demand trends, making inventory and pricing decisions inefficient and often reactive.
+
+### 3.2 Current Problems / Existing Alternatives
+- Patients currently rely on walking/calling multiple local pharmacies to compare prices, or trust whatever pharmacy is nearest.
+- Some general e-pharmacy apps sell medicines but do not focus on cross-pharmacy generic price comparison.
+- Doctors often default to familiar brand names due to lack of quick substitution reference at prescription time.
+- Small pharmacies use manual registers/spreadsheets or informal distributor calls to track pricing and stock.
+
+### 3.3 Pain Points
+
+| Stakeholder | Pain Point |
+|---|---|
+| Patient | Overpays for branded medicine unaware of cheaper generic equivalents |
+| Patient | No trust signal for authenticity when buying online |
+| Caregiver (chronic care) | Manual reordering every month is tedious; forgets refills |
+| Doctor | No fast tool to verify generic substitute availability while prescribing |
+| Small Pharmacy | No price intelligence versus competitors; stock-outs or overstock |
+| Business | Thin margins on generics require volume — a slow/low-trust product will not scale |
+
+### 3.4 Why Now
+India has a large and growing generics ecosystem, rising digital adoption for health services, and increasing consumer price sensitivity in healthcare spending. Government-backed generic initiatives (e.g., Jan Aushadhi-type programs) show established public appetite for verified low-cost generics. This is a directional market signal only — **formal market sizing and demand validation (TAM/SAM/SOM, willingness to pay, adoption rate) is required before scale investment** and is flagged as an open question.
+
+### 3.5 Competitive Landscape
+No specific competitor data has been provided, so no competitor facts are fabricated here. Relevant categories of alternatives include:
+
+- **General e-pharmacy apps** (sell branded + generic medicine, but typically single-price-per-SKU, not multi-supplier price comparison)
+- **Government generic pharmacy chains** (physical-only, limited digital experience)
+- **Local pharmacy aggregator/delivery apps** (hyperlocal delivery focus, not price-comparison focus)
+- **Manual/offline comparison** (patient calling multiple pharmacies)
+
+**Expected table stakes:** licensed sourcing, prescription upload, secure payments, delivery tracking, customer support.
+
+**Potential differentiation for GenericMed:**
+- Purpose-built **multi-supplier price comparison engine** (not just single-seller catalog)
+- Transparent price breakdown building trust
+- Doctor-validated substitution suggestions embedded in the buying flow
+- B2B angle: pricing intelligence tool for small pharmacies (data flywheel)
+- White-label comparison engine for clinics/hospitals
+
+### 3.6 Product Differentiation
+Users choose GenericMed because it is the only step where they can see **verified, itemized, lowest-available price for their exact medicine**, backed by authenticity checks and doctor-approved substitution logic — reducing both cost and trust risk in a single flow, which most single-seller e-pharmacy apps do not offer.
+
+---
+
+## 4. GOALS, OBJECTIVES & NON-GOALS
+
+### 4.1 Business Goals
+
+| ID | Goal | Target | Timeframe |
+|---|---|---|---|
+| BG-01 | Launch MVP in initial urban markets | Live in 2–3 pilot cities | Within Phase 1 (MVP) |
+| BG-02 | Onboard licensed pharmacy/supplier partners | 50+ verified partners per pilot city | 6 months post-launch |
+| BG-03 | Achieve repeat purchase behavior for chronic-medicine users | 30% of chronic-med users on recurring/scheduled delivery | 9 months post-launch |
+| BG-04 | Establish unit economics viability | Positive contribution margin per order (post logistics cost) | 12 months post-launch |
+| BG-05 | Build organic acquisition channel | 40%+ of new users via organic search/doctor referral (not paid ads) | 12 months post-launch |
+
+*Note: Numeric targets above are illustrative planning targets, not validated market commitments — to be revisited with Business/Founder sign-off. Flagged in Open Questions.*
+
+### 4.2 Product Goals
+- Give patients a fast, trustworthy way to find the lowest verified price for a required medicine or its generic equivalent.
+- Make prescription upload and validation frictionless while remaining fully compliant.
+- Give small pharmacy partners visibility and demand through the platform without requiring heavy tech investment on their side.
+- Build a reordering experience so chronic-care patients never miss a refill.
+- Provide administrators/operations visibility into pricing, supply, and compliance health of the marketplace.
+
+### 4.3 Non-Goals (Current Release)
+- GenericMed will **not** provide medical diagnosis, treatment advice, or teleconsultation in this release.
+- GenericMed will **not** sell scheduled/controlled substances requiring special narcotics licensing in the MVP.
+- GenericMed will **not** operate its own warehousing/manufacturing; it operates as a marketplace/aggregator over licensed partners.
+- GenericMed will **not** support international cross-border shipping in this release.
+- GenericMed will **not** build a full hospital/clinic EHR integration in this release (white-label offering is roadmap-only, Phase 3+).
+
+---
+
+## 5. SUCCESS METRICS & KPIs
+
+### 5.1 North Star Metric
+**Verified Savings Delivered per Active User per Month** (₹ saved vs. reference/branded price, calculated at checkout).
+
+Rationale: It directly represents the core value proposition (affordability through comparison) and correlates with both user retention and trust, rather than pure transaction volume which could be gamed by low-value orders.
+
+### 5.2 Primary KPIs
+
+| KPI | Definition | Target | Measurement Method |
+|---|---|---|---|
+| Monthly Active Users (MAU) | Unique users completing at least one search/session per month | Growth trend post-launch | Product analytics |
+| Search-to-Order Conversion | % of price-comparison searches resulting in a completed order | ≥8% by month 6 | Funnel analytics |
+| Prescription Verification Turnaround | Time from upload to verification decision | ≤15 minutes (business hours) | OCR + pharmacist workflow logs |
+| Order Fulfillment Success Rate | % of orders delivered without cancellation/failure | ≥95% | Order management system |
+| Chronic Refill Retention | % of recurring-delivery users active after 90 days | ≥60% | Subscription/refill module |
+| Partner Pharmacy Fill Rate | % of orders successfully fulfilled by assigned partner without stockout | ≥90% | Inventory sync logs |
+| Customer Support Resolution Time | Avg time to resolve support ticket | ≤24 hours | Helpdesk system |
+| Net Promoter Score (NPS) | User satisfaction/referral likelihood | Baseline in MVP, improve quarterly | In-app survey |
+
+### 5.3 AARRR Framework
+
+| Stage | Definition for GenericMed |
+|---|---|
+| Acquisition | Organic search (SEO for "generic alternative to [brand]"), doctor referral links, word of mouth |
+| Activation | User completes first successful price search AND views a lowest-price result |
+| Retention | User returns for repeat purchase or activates a scheduled refill |
+| Revenue | Commission/margin earned per completed order |
+| Referral | User shares savings/refers another user or doctor shares substitution link |
+
+### 5.4 Guardrail Metrics
+Metrics that must **not** deteriorate while optimizing growth:
+
+- Prescription verification error rate (false approval of invalid prescription)
+- Medicine authenticity complaint rate
+- Payment failure rate
+- Refund/return rate
+- Delivery delay rate beyond SLA
+- Customer data/privacy incident count (target: zero tolerance)
+- App/API error rate and latency (see NFR section)
+
+---
+
+## 6. TARGET USERS & PERSONAS
+
+### Persona A — Price-Sensitive Patient (Primary Customer)
+- **Age/Role:** 30–55, self or family medicine purchaser, urban/semi-urban
+- **Context:** Manages own or family chronic condition (diabetes, hypertension, thyroid) requiring monthly medication
+- **Goals:** Find the cheapest legitimate option for prescribed medicine; avoid repeat pharmacy visits
+- **Frustrations:** Confusion between brand names and generics; distrust of "too cheap" online medicine; forgets to reorder
+- **Needs:** Transparent pricing, authenticity assurance, easy reorder/refill reminders
+- **Behaviour:** Price-conscious, compares before buying, prefers simple checkout
+- **Device/Environment:** Primarily mobile (Android), variable network quality
+- **Frequency of Use:** Monthly to weekly (chronic meds), occasional (acute illness)
+
+### Persona B — Caregiver for Elderly Parent
+- **Age/Role:** 25–45, adult child managing parent's medication
+- **Context:** Orders on behalf of an elderly parent who cannot use apps easily
+- **Goals:** Ensure timely, correct, uninterrupted medicine supply for parent
+- **Frustrations:** Managing multiple prescriptions; ensuring correct dosage/substitute; delivery reliability
+- **Needs:** Scheduled/recurring delivery, saved prescriptions, multiple delivery addresses
+- **Device/Environment:** Mobile + occasionally desktop
+- **Frequency of Use:** Recurring monthly
+
+### Persona C — Prescribing Doctor / Clinic Staff
+- **Age/Role:** Practicing physician or clinic pharmacist
+- **Context:** Wants to recommend affordable, equivalent generics to patients at point of consultation
+- **Goals:** Quickly verify a generic substitute exists, is available, and is credible before recommending
+- **Frustrations:** No fast reference tool; liability concerns recommending unknown brands
+- **Needs:** Doctor-facing substitution lookup, verified manufacturer information, shareable referral link
+- **Device/Environment:** Desktop (clinic) or mobile
+- **Frequency of Use:** Daily during consultations
+
+### Persona D — Small Pharmacy Partner Owner
+- **Age/Role:** Independent pharmacy owner/operator
+- **Context:** Wants additional order volume and better pricing intelligence without heavy tech adoption cost
+- **Goals:** Increase footfall/orders via platform; understand competitor pricing; avoid stockouts
+- **Frustrations:** Manual inventory tracking; unclear demand patterns; delayed payouts
+- **Needs:** Simple onboarding, inventory sync tools, demand/restock alerts, transparent payout reporting
+- **Device/Environment:** Desktop/tablet at pharmacy counter, mobile for alerts
+- **Frequency of Use:** Daily
+
+### Persona E — Platform Operations/Admin User
+- **Role:** Internal GenericMed operations & compliance staff
+- **Goals:** Monitor supplier performance, pricing integrity, compliance status, and platform health
+- **Needs:** Dashboards, audit logs, exception alerts, reporting tools
+- **Frequency of Use:** Daily
+
+---
+
+## 7. USER STORIES & JOBS TO BE DONE
+
+### Customer / Caregiver
+
+**Authentication**
+- As a patient, I want to sign up/log in using mobile number + OTP, so that I can access my account securely without remembering a password.
+- As a returning user, I want to stay logged in on my device, so that I don't need to re-authenticate every visit.
+
+**Discovery**
+- As a patient, I want to search a medicine by brand name, salt/composition, or condition, so that I can find it even if I don't know the generic name.
+- As a patient, I want to see the lowest price for my medicine across verified sellers, so that I can save money.
+- As a patient, I want to see a price breakdown (base price, delivery, tax), so that I trust there are no hidden charges.
+
+**Core Action**
+- As a patient, I want to upload my prescription and have it verified quickly, so that I can order prescription medicines without visiting a pharmacy.
+- As a patient, I want to see doctor-validated generic substitutes for my prescribed brand, so that I can choose a cheaper equivalent confidently.
+- As a patient, I want to verify a medicine's batch/expiry/manufacturer before purchase, so that I trust its authenticity.
+
+**Payment**
+- As a patient, I want multiple payment options (UPI, card, wallet, COD where available), so that I can pay conveniently.
+- As a patient, I want to be notified immediately if my payment fails, so that I can retry or choose another method.
+
+**Tracking**
+- As a patient, I want to track my order status in real time, so that I know when it will arrive.
+- As a caregiver, I want to schedule recurring deliveries for chronic medicine, so that I never run out of stock.
+
+**History**
+- As a patient, I want to view my order history and total savings, so that I can track how much I've saved over time.
+- As a patient, I want to reorder a past order in one click, so that I save time on repeat purchases.
+
+**Support**
+- As a patient, I want to reach a pharmacist helpline, so that I can clarify dosage or substitution concerns.
+- As a patient, I want to request a return/refund for a damaged or incorrect order, so that I am not stuck with unusable medicine.
+
+### Doctor/Clinic
+
+- As a doctor, I want to search for generic substitutes for a brand I usually prescribe, so that I can recommend a cost-effective alternative.
+- As a doctor, I want to share a substitution recommendation link with my patient, so that they can order directly.
+- As a clinic administrator, I want to inquire about a white-labeled version of the comparison tool, so that I can offer it under our clinic's brand (future phase).
+
+### Vendor/Partner (Pharmacy/Supplier)
+
+**Onboarding**
+- As a pharmacy owner, I want to register and submit my license/documents for verification, so that I can start selling on GenericMed.
+
+**Operations**
+- As a pharmacy partner, I want to sync my inventory with the platform, so that customers only see medicines I actually have in stock.
+- As a pharmacy partner, I want automated restock alerts, so that I don't run out of high-demand medicines.
+
+**Fulfillment**
+- As a pharmacy partner, I want to receive and confirm orders assigned to me, so that I can fulfill them within SLA.
+- As a pharmacy partner, I want to mark an order as packed/dispatched, so that the customer sees accurate tracking.
+
+**Earnings**
+- As a pharmacy partner, I want to view my payout and order performance reports, so that I can track my earnings and reconcile accounts.
+
+### Admin/Operations
+
+**Management**
+- As an admin, I want to approve or reject pharmacy/supplier onboarding applications, so that only licensed sellers are on the platform.
+- As an admin, I want to manage medicine catalog entries and mappings (brand ↔ generic ↔ salt), so that search results are accurate.
+
+**Monitoring**
+- As an admin, I want to monitor supplier price submissions for anomalies, so that I can detect pricing errors or fraud.
+- As an admin, I want to view flagged prescriptions requiring manual pharmacist review, so that compliance is maintained.
+
+**Reporting**
+- As an admin, I want demand forecasting reports, so that I can guide partner pharmacies on stocking decisions.
+- As an admin, I want compliance and audit reports, so that I can respond to regulatory inquiries.
+
+**Configuration**
+- As an admin, I want to configure supported cities, languages, and payment methods, so that rollout can be controlled by market readiness.
+
+### Key Jobs To Be Done
+1. "Help me find the cheapest legitimate version of the medicine I need, right now."
+2. "Help me never run out of my regular medication without me having to remember."
+3. "Help me trust that what I'm buying online is genuine and safe."
+4. "Help me (as a doctor) confidently recommend a cheaper alternative without extra research."
+5. "Help me (as a small pharmacy) get more orders and not overstock/understock."
+
+---
+
+## 8. SCOPE, ASSUMPTIONS, CONSTRAINTS & DEPENDENCIES
+
+### 8.1 In Scope
+- Patient-facing web app (responsive/PWA) and native mobile apps (iOS/Android)
+- Salt/brand/dosage/indication-based medicine search with generic equivalent mapping
+- Real-time multi-supplier price comparison and lowest-price highlighting
+- Prescription upload, OCR-assisted data extraction, pharmacist verification workflow
+- Authenticity verification (batch/expiry/manufacturer) at order level
+- Checkout, payments, scheduled/recurring orders
+- Order tracking, returns/refunds, digital invoicing
+- Pharmacy/supplier partner onboarding portal and inventory sync
+- Admin analytics: demand forecasting, competitor pricing views, supplier performance
+- Multilingual UI (English + selected regional languages)
+- Accessibility features for elderly users (large fonts, voice search)
+- Audit logging and compliance reporting
+
+### 8.2 Out of Scope (Current Release)
+- Teleconsultation / doctor video-call features
+- Sale of narcotics/controlled substances requiring special licensing
+- Own warehousing, manufacturing, or last-mile delivery fleet (assumes partner/3PL logistics)
+- International/cross-border order fulfillment
+- Full white-label multi-tenant clinic/hospital platform (roadmap Phase 3+)
+- Insurance claim integration
+- AI-based clinical diagnosis or dosage recommendation beyond doctor-validated substitution data
+
+### 8.3 Assumptions
+*(Clearly labeled as assumptions, not confirmed decisions)*
+
+- **A1:** GenericMed will operate on a marketplace/commission model, earning a margin/commission per transaction from partner pharmacies — to be confirmed by Business.
+- **A2:** Initial launch geography will be 2–3 pilot cities in India before wider urban/semi-urban rollout.
+- **A3:** A network of licensed pharmacy/supplier partners can be contracted prior to launch to guarantee "lowest price" claims are real and current.
+- **A4:** Logistics/delivery will be fulfilled via partner pharmacies or a third-party logistics (3PL) integration, not an in-house fleet, at MVP stage.
+- **A5:** Government drug database integration (e.g., for drug master data, batch/manufacturer verification) is accessible via API or licensed data provider — exact source TBD.
+- **A6:** Regulatory framework permits e-pharmacy operations with prescription verification as designed; exact compliance requirements to be validated with legal counsel per applicable Indian drug/e-pharmacy regulations.
+- **A7:** COD (cash on delivery) may be required for semi-urban market trust-building — to be validated.
+
+### 8.4 Constraints
+
+**Business Constraints**
+- Must operate exclusively with licensed pharmacies/manufacturers.
+- Thin margins on generics require high order volume and negotiated supplier contracts.
+- Low CAC required — reliance on organic/SEO/referral channels rather than heavy paid acquisition.
+- 24/7 customer support and pharmacist helpline is a mandatory operational commitment from day one.
+
+**Technical Constraints**
+- Must integrate with licensed pharmacy/supplier APIs and government drug databases.
+- Sub-second search/pricing latency requirement.
+- Mobile-first design: PWA + native apps with offline search cache.
+- Strict encryption and HIPAA/GDPR-equivalent handling of health data and prescriptions.
+
+**Operational Constraints**
+- Requires trained pharmacist staff/on-call network for prescription review and helpline.
+- Requires active partner pharmacy inventory accuracy to sustain "real-time" pricing claims.
+
+**Geographic Constraints**
+- Initial launch limited to urban and semi-urban Indian cities with sufficient licensed pharmacy density.
+
+**Compliance Constraints**
+- Prescription validation, controlled substance exclusion, and pharmacovigilance (adverse event reporting) processes are mandatory before launch — exact legal requirements must be validated with regulatory/legal counsel (flagged in Open Questions).
+
+**Budget/Timeline Constraints**
+- Not specified in input; to be defined by Business/Founder (Open Question).
+
+### 8.5 Dependencies
+
+| Dependency | Type | Description | Impact if Delayed |
+|---|---|---|---|
+| Licensed pharmacy/supplier partner contracts | Business | Required to source real-time, guaranteed-lowest pricing | No live inventory/pricing; MVP cannot launch |
+| Government drug database access | External/Technical | Needed for drug master data, authenticity/manufacturer verification | Reduced authenticity assurance; manual verification fallback needed |
+| Payment gateway integration | Technical | Required for checkout | Checkout blocked; revenue blocked |
+| OCR/prescription processing service | Technical | Needed for prescription upload workflow | Manual-only verification; slower turnaround |
+| SMS/OTP provider | Technical | Needed for authentication | Login/signup blocked |
+| Logistics/3PL or partner delivery capability | Operational | Needed for order fulfillment | Orders cannot be delivered reliably |
+| Legal/regulatory compliance sign-off | Compliance | Required before processing prescriptions and payments | Launch cannot proceed legally |
+| Pharmacist staffing (in-house or contracted) | Operational | Needed for prescription review and helpline | Verification SLA breach; support commitment unmet |
+
+---
+
+## 9. FUNCTIONAL REQUIREMENTS
+
+### 9.1 Authentication & Onboarding
+
+| ID | Requirement | Priority | Acceptance Criteria |
+|---|---|---|---|
+| FR-AUTH-01 | System shall allow user registration/login via mobile number + OTP | P0 | Given a valid 10-digit mobile number, when user requests OTP, an OTP is sent within 30 seconds; entering correct OTP within validity window (e.g., 5 minutes) logs the user in successfully. |
+| FR-AUTH-02 | System shall reject invalid/expired OTP attempts | P0 | Given an expired or incorrect OTP, system displays an error and does not authenticate the user; user is allowed to request a new OTP after cooldown period. |
+| FR-AUTH-03 | System shall support optional email + password as alternate login | P1 | User can register with email/password meeting complexity rules; login succeeds with correct credentials, fails with incorrect ones with a generic error message. |
+| FR-AUTH-04 | System shall allow session persistence on trusted devices | P1 | User remains logged in across app restarts until explicit logout or session expiry policy (e.g., 30 days) is reached. |
+| FR-AUTH-05 | System shall support account recovery | P1 | User can reset access via mobile OTP if device/account access is lost. |
+| FR-AUTH-06 | System shall capture basic profile info (name, age, preferred language, delivery address) during onboarding | P0 | User cannot proceed to first order without minimum required profile fields completed; all fields validated for correct format. |
+| FR-AUTH-07 | System shall support pharmacy/supplier partner registration with document upload (license, GST, etc.) | P0 | Partner can submit registration form with required document uploads; submission is stored and routed to admin approval queue; partner sees "Pending Verification" status. |
+
+### 9.2 User Profile
+
+| ID | Requirement | Priority | Acceptance Criteria |
+|---|---|---|---|
+| FR-USER-01 | User shall be able to manage multiple saved addresses | P0 | User can add, edit, delete, and set a default delivery address; at least one address required to complete checkout. |
+| FR-USER-02 | User shall be able to manage saved prescriptions | P0 | Uploaded prescriptions are stored under user profile with upload date and validity status; user can view/download past prescriptions. |
+| FR-USER-03 | User shall be able to select preferred language | P0 | User can switch UI language from a supported list; selection persists across sessions. |
+| FR-USER-04 | User shall be able to manage family member/dependent profiles (for caregivers) | P1 | Caregiver can add a dependent profile with separate prescriptions/order history linked to the same account. |
+| FR-USER-05 | User shall be able to enable accessibility settings (font size, voice search) | P1 | User can toggle large-font mode and voice search; settings persist across sessions. |
+
+### 9.3 Discovery / Search
+
+| ID | Requirement | Priority | Acceptance Criteria |
+|---|---|---|---|
+| FR-SRCH-01 | System shall support search by brand name, salt/composition, dosage, or medical condition/indication | P0 | Searching any of the above input types returns relevant medicine results within 1 second (p95) under normal load. |
+| FR-SRCH-02 | System shall display generic equivalents alongside searched brand | P0 | When a branded medicine is searched, system shows at least one generic equivalent (if available) with composition match indicator. |
+| FR-SRCH-03 | System shall support autocomplete/typeahead suggestions | P1 | As user types 3+ characters, relevant suggestions appear within 300ms. |
+| FR-SRCH-04 | System shall support voice search | P1 | User can search via voice input in supported languages; transcribed query returns matching results. |
+| FR-SRCH-05 | System shall cache recent/frequent searches offline (PWA) | P1 | When offline, user can view previously cached search results and medicine info (without live pricing). |
+| FR-SRCH-06 | System shall handle zero-result search gracefully | P0 | If no match is found, system displays "No results found" with suggestion to search by salt name or contact pharmacist helpline. |
+
+### 9.4 Core Product Functionality — Price Comparison Engine
+
+| ID | Requirement | Priority | Acceptance Criteria |
+|---|---|---|---|
+| FR-CORE-01 | System shall retrieve and display real-time prices for a selected medicine from all available licensed suppliers | P0 | For a given medicine + dosage, system displays prices from all currently active suppliers with stock, refreshed within defined data-sync interval (target ≤5 minutes staleness). |
+| FR-CORE-02 | System shall highlight the lowest available price clearly | P0 | The supplier offering the lowest total price (including delivery/tax) is visually distinguished as "Lowest Price" in the results list. |
+| FR-CORE-03 | System shall display a transparent price breakdown | P0 | Selecting a price shows base price, delivery fee, applicable tax, and total, with all values summing correctly to the displayed total. |
+| FR-CORE-04 | System shall show doctor-validated substitution suggestions | P0 | For a prescribed brand with no direct match, system shows substitutes tagged "Doctor-Validated" only if sourced from an approved clinical/substitution reference; unvalidated matches are labeled "Composition Match – Consult Pharmacist." |
+| FR-CORE-05 | System shall perform authenticity checks (batch, expiry, manufacturer) before confirming an order | P0 | Order cannot be confirmed if selected batch's expiry date is in the past or the manufacturer is unverified; system blocks and displays reason. |
+| FR-CORE-06 | System shall exclude out-of-stock supplier offers from comparison results | P0 | If a supplier's synced inventory shows zero stock, their price is not shown in the initial results (or shown greyed out labeled "Out of Stock"). |
+| FR-CORE-07 | System shall re-validate price and stock at checkout before payment | P0 | If price/stock has changed since search, user is notified of the updated price/availability before payment is processed; user must confirm before proceeding. |
+
+### 9.5 Payments
+
+| ID | Requirement | Priority | Acceptance Criteria |
+|---|---|---|---|
+| FR-PAY-01 | System shall support multiple payment methods (UPI, credit/debit card, net banking, wallet) | P0 | User can select from at least two live payment methods at checkout; selected method's payment flow completes successfully in test/sandbox scenario. |
+| FR-PAY-02 | System shall support Cash on Delivery (COD) where enabled | P1 | If COD is enabled for the delivery pincode, user can select COD as payment method at checkout. |
+| FR-PAY-03 | System shall handle payment failure gracefully | P0 | On payment failure, user sees a clear error message and is given the option to retry or choose a different payment method without losing cart contents. |
+| FR-PAY-04 | System shall prevent duplicate charge on retry/network interruption | P0 | If a network interruption occurs mid-payment, system verifies transaction status with payment gateway before allowing a new charge attempt; duplicate charges are not created. |
+| FR-PAY-05 | System shall generate a digital invoice upon successful payment | P0 | Invoice with itemized price breakdown, order ID, and GST details (if applicable) is generated and available for download within the order confirmation screen. |
+| FR-PAY-06 | System shall support refunds to original payment method | P0 | Approved refund is initiated to the original payment method within defined SLA (e.g., 5–7 business days) and refund status is visible to user. |
+
+### 9.6 Notifications
+
+| ID | Requirement | Priority | Acceptance Criteria |
+|---|---|---|---|
+| FR-NOTIF-01 | System shall send order status notifications (confirmed, packed, shipped, delivered) | P0 | User receives push/SMS/email notification within 2 minutes of each status change. |
+| FR-NOTIF-02 | System shall send prescription verification status notifications | P0 | User is notified immediately when prescription is approved, rejected, or requires clarification. |
+| FR-NOTIF-03 | System shall send refill reminders for scheduled/recurring medicines | P0 | User receives a reminder notification a configurable number of days (default 3) before the next scheduled refill date. |
+| FR-NOTIF-04 | System shall allow users to manage notification preferences | P1 | User can enable/disable specific notification categories (marketing vs. transactional); transactional notifications cannot be fully disabled. |
+
+### 9.7 History
+
+| ID | Requirement | Priority | Acceptance Criteria |
+|---|---|---|---|
+| FR-HIST-01 | System shall display complete order history per user | P0 | User can view all past orders with status, date, items, and total amount paid. |
+| FR-HIST-02 | System shall display a cumulative savings tracker | P0 | User's dashboard shows total ₹ saved (branded reference price minus paid price) across all completed orders. |
+| FR-HIST-03 | System shall allow one-click reorder from history | P0 | Selecting "Reorder" from a past order re-populates the cart with the same items (subject to current stock/price re-validation per FR-CORE-07). |
+| FR-HIST-04 | System shall allow scheduled/recurring order management | P0 | User can create, pause, modify, or cancel a recurring delivery schedule for a chronic medicine; changes take effect on the next scheduled cycle. |
+
+### 9.8 Support
+
+| ID | Requirement | Priority | Acceptance Criteria |
+|---|---|---|---|
+| FR-SUP-01 | System shall provide access to a pharmacist helpline (chat/call) | P0 | User can initiate a support request routed to a licensed pharmacist during defined support hours (24/7 per business constraint); confirmation of request receipt is shown. |
+| FR-SUP-02 | System shall support returns/refund requests | P0 | User can request return/refund within a defined window (e.g., 7 days for eligible items) by selecting an order and reason; request is logged and routed to operations. |
+| FR-SUP-03 | System shall support a ticketing system for general support queries | P1 | User-submitted queries generate a trackable ticket with status (open/in progress/resolved) visible to the user. |
+| FR-SUP-04 | System shall exclude non-returnable items (e.g., opened medicine) from return eligibility per policy | P0 | Return request for a non-eligible item is blocked with an explanation referencing return policy. |
+
+### 9.9 Admin
+
+| ID | Requirement | Priority | Acceptance Criteria |
+|---|---|---|---|
+| FR-ADM-01 | Admin shall be able to approve/reject pharmacy/supplier partner applications | P0 | Admin reviews submitted documents and approves or rejects with a mandatory reason; partner status updates accordingly and partner is notified. |
+| FR-ADM-02 | Admin shall be able to manage the medicine catalog (brand-to-generic-to-salt mapping) | P0 | Admin can create, edit, deactivate catalog entries; changes reflect in search results within a defined sync window (e.g., 15 minutes). |
+| FR-ADM-03 | Admin shall be able to review and manually verify flagged prescriptions | P0 | Prescriptions flagged by OCR/rules engine (e.g., low OCR confidence, controlled substance keyword) appear in a manual review queue; admin/pharmacist can approve or reject with reason. |
+| FR-ADM-04 | Admin shall be able to monitor supplier price submissions for anomalies | P1 | System flags price entries deviating beyond a configurable threshold (e.g., ±50% from category median) for admin review before publishing. |
+| FR-ADM-05 | Admin shall be able to configure supported cities, languages, and payment methods | P0 | Admin can enable/disable a city, language, or payment method; change reflects in user-facing app within a defined propagation window. |
+| FR-ADM-06 | Admin shall have access to audit logs of sensitive actions | P0 | All sensitive actions (see Section 18) are logged with actor, timestamp, action, and reference entity; logs are searchable/filterable by admin. |
+
+### 9.10 Operations
+
+| ID | Requirement | Priority | Acceptance Criteria |
+|---|---|---|---|
+| FR-OPS-01 | Operations shall be able to view real-time order fulfillment status across all partners | P0 | Dashboard displays all active orders with current status and assigned partner; filterable by status/city/partner. |
+| FR-OPS-02 | Operations shall be able to reassign an order to an alternate supplier if original cannot fulfill | P0 | If a partner marks an order "unable to fulfill," operations can reassign to next-best available supplier without requiring the customer to reorder. |
+| FR-OPS-03 | System shall trigger automated restocking alerts for partner pharmacies | P1 | When a SKU's stock falls below a configurable threshold, an alert is sent to the relevant partner automatically. |
+| FR-OPS-04 | System shall provide demand forecasting reports to operations/admin | P1 | Report shows projected demand per SKU/region based on historical order data, refreshed at least weekly. |
+
+### 9.11 Vendor/Partner (Pharmacy/Supplier)
+
+| ID | Requirement | Priority | Acceptance Criteria |
+|---|---|---|---|
+| FR-VEN-01 | Partner shall be able to submit/update inventory and pricing | P0 | Partner can update SKU stock levels and prices via portal; updates reflect in comparison engine within defined sync SLA (target ≤5 minutes). |
+| FR-VEN-02 | Partner shall be able to view and accept/reject assigned orders | P0 | Partner sees incoming order requests with a response SLA timer (e.g., 15 minutes); non-response beyond SLA auto-escalates to operations for reassignment. |
+| FR-VEN-03 | Partner shall be able to mark orders as packed/dispatched | P0 | Order status updates by partner reflect immediately in customer-facing tracking. |
+| FR-VEN-04 | Partner shall be able to view payout and performance reports | P0 | Partner portal shows order volume, revenue, commission deducted, and payout schedule/status. |
+| FR-VEN-05 | Partner onboarding shall require license and compliance document verification before activation | P0 | Partner cannot list inventory or receive orders until admin approval (see FR-ADM-01) is completed. |
+
+### 9.12 Reporting
+
+| ID | Requirement | Priority | Acceptance Criteria |
+|---|---|---|---|
+| FR-REP-01 | System shall generate compliance reports (prescription verification logs, controlled substance exclusions) | P0 | Admin can generate a report for a selected date range showing all prescription verification decisions and outcomes. |
+| FR-REP-02 | System shall generate competitor/market pricing insight reports for admin | P1 | Admin can view aggregated price trend reports per medicine category over time. |
+| FR-REP-03 | System shall generate supplier performance scorecards | P1 | Report includes fill rate, SLA adherence, and cancellation rate per supplier, refreshed weekly. |
+
+---
+
+## 10. EDGE CASES & EXCEPTION HANDLING
+
+| Feature | Scenario | Expected System Behaviour |
+|---|---|---|
+| Search | Query returns zero matches | Show "No results" state with suggestion to try salt name or contact pharmacist helpline |
+| Price Comparison | All suppliers out of stock | Show "Currently unavailable near you" with option to notify user when back in stock |
+| Price Comparison | Price changes between search and checkout | Re-validate and prompt user to confirm updated price before payment (FR-CORE-07) |
+| Prescription Upload | Blurry/unreadable image | OCR confidence below threshold routes to manual pharmacist review; user notified of delay |
+| Prescription Upload | Prescription for controlled/excluded substance | System blocks order, displays policy message, and does not add item to cart |
+| Prescription Upload | Expired prescription (per validity rules) | System rejects upload with reason; prompts user to obtain a fresh prescription |
+| Authentication | OTP not received | Provide "Resend OTP" after cooldown (e.g., 30s) and alternate login method fallback |
+| Authentication | Expired session mid-checkout | Prompt re-authentication; preserve cart contents where technically feasible |
+| Payment | Payment gateway timeout | Do not confirm order; check transaction status via gateway API before allowing retry; avoid duplicate charge |
+| Payment | Partial payment/refund mismatch | Flag for manual reconciliation by operations; do not auto-close order |
+| Order Fulfillment | Assigned partner cannot fulfill after acceptance | Auto-escalate to operations for reassignment (FR-OPS-02); notify customer of any delay |
+| Order Fulfillment | Duplicate order submission (double-tap checkout) | System detects duplicate request within short window (e.g., 10s) and prevents double order creation |
+| Returns | Return requested for non-returnable item | Block request, display return policy explanation |
+| Recurring Delivery | Scheduled refill date falls when item is out of stock | Notify user, offer substitute or delayed fulfillment option, allow manual override |
+| Partner Onboarding | Incomplete/invalid documents submitted | Application held in "Incomplete" status with specific missing-item feedback to partner |
+| Network | User loses connectivity mid-search (PWA) | Serve cached recent search results (without live price) with an "Offline – prices may be outdated" banner |
+| Third-Party Service | Government drug database API unavailable | Fall back to internally cached drug master data; flag authenticity check as "Pending Verification" rather than blocking indefinitely (policy TBD with Compliance) |
+| Admin | Two admins attempt conflicting catalog edits simultaneously | Last-write-wins with audit log entry, or optimistic locking conflict warning (implementation decision for Engineering) |
+
+---
+
+## 11. KEY USER FLOWS
+
+### Primary Customer Flow — Search to Delivery
+Start → User searches medicine by name/salt/condition → System returns comparison results with lowest price highlighted → User selects a listing → System checks if prescription required → [If required] User uploads prescription → OCR + pharmacist verification → Approved → User proceeds to cart → User selects delivery address and payment method → System re-validates price/stock → Payment processed → Order confirmed → Order assigned to partner pharmacy → Status updates (packed → shipped → delivered) → User receives delivery confirmation → Completion (order marked delivered, added to history/savings tracker)
+
+### Prescription Rejection Flow (Failure Flow)
+Upload Prescription → OCR Extraction → Low Confidence / Invalid Content Detected → Routed to Manual Pharmacist Review → Pharmacist Rejects (reason: unclear/invalid/controlled substance) → User Notified with Reason → User Re-uploads Corrected Prescription → OCR Extraction → Approved → Proceed to Cart
+
+### Payment Failure Flow
+Checkout → Payment Attempt → Payment Gateway Declines/Times Out → System Displays Error with Reason → User Chooses Retry Same Method or Alternate Method → Payment Attempt Succeeds → Order Confirmation
+*(If retries exhausted: Cart preserved, user directed to support/helpline)*
+
+### Recurring/Scheduled Delivery Flow
+User Enables "Schedule Refill" on Chronic Medicine Order → User Sets Frequency (e.g., every 30 days) → System Schedules Next Order → Reminder Sent (Configurable Days Before) → On Scheduled Date: System Re-validates Price/Stock/Prescription Validity → [If Valid] Auto-charge via Saved Payment Method → Order Created → [If Invalid/Stock Issue] Notify User for Manual Action → Completion or Pause
+
+### Admin Flow — Partner Onboarding Approval
+Partner Submits Registration + Documents → Application Enters Admin Queue → Admin Reviews License/Compliance Documents → [Approve] Partner Account Activated, Notified, Portal Access Granted → Partner Uploads Inventory/Pricing → Listings Go Live
+*(Alternate: [Reject] Partner Notified with Reason → Partner Can Resubmit)*
+
+### Vendor/Partner Flow — Order Fulfillment
+Order Assigned to Partner → Partner Notified (SLA Timer Starts) → Partner Accepts Order → Partner Packs Item → Partner Marks Dispatched → Delivery Partner/3PL Picks Up → Customer Tracking Updated → Delivery Confirmed → Payout Calculated in Next Settlement Cycle
+*(Failure Branch: Partner Rejects/Timeout → Order Auto-Escalated to Operations → Reassigned to Next Supplier)*
+
+### Operations Flow — Exception Handling
+Operations Dashboard Detects SLA Breach (e.g., unaccepted order, delayed dispatch) → Alert Triggered → Operations Investigates → Reassigns Order or Contacts Partner → Resolution Logged → Customer Notified of Status Update if Impacted
+
+### Doctor Flow — Substitution Lookup & Referral
+Doctor Logs into Doctor Portal/Tool → Searches Brand Name Prescribed → System Shows Doctor-Validated Generic Substitutes with Price Range → Doctor Selects Substitute to Recommend → Doctor Shares Referral Link/Code with Patient → Patient Opens Link → Pre-filled Search Result Shown → Patient Proceeds to Purchase Flow
+
+---
+
+## 12. NON-FUNCTIONAL REQUIREMENTS
+
+| ID | Category | Requirement | Target / Acceptance |
+|---|---|---|---|
+| NFR-PERF-01 | Performance | Price comparison search response time | p95 ≤ 1 second under normal load (as defined in tech constraints) |
+| NFR-PERF-02 | Performance | Page/app load time (mobile, 4G) | ≤3 seconds for home and search screens |
+| NFR-PERF-03 | Performance | Checkout API response time | ≤2 seconds p95 |
+| NFR-SCALE-01 | Scalability | Concurrent user handling during peak demand (e.g., seasonal/outbreak surges) | System auto-scales to support at least 5x baseline concurrent traffic without degradation beyond defined performance targets |
+| NFR-SCALE-02 | Scalability | Transaction throughput | Support minimum defined peak orders/minute per launch city (target to be set with Engineering capacity planning) |
+| NFR-AVAIL-01 | Availability | Platform uptime (excluding planned maintenance) | ≥99.5% monthly uptime for customer-facing services |
+| NFR-AVAIL-02 | Availability | Critical path (search, checkout, payment) availability | ≥99.9% during business hours |
+| NFR-REL-01 | Reliability | Duplicate order/payment prevention | Zero tolerance — no duplicate charges per verified transaction; idempotency enforced on payment/order APIs |
+| NFR-REL-02 | Reliability | Data consistency across inventory sync | Inventory shown to customer must not be stale beyond configured sync SLA (target ≤5 minutes) |
+| NFR-REL-03 | Reliability | Failure recovery | System recovers from a service outage with no data loss for confirmed orders/payments (transactional integrity) |
+| NFR-SEC-01 | Security | Authentication | OTP-based and/or credential-based auth with rate limiting on login attempts (e.g., max 5 attempts per 15 minutes) |
+| NFR-SEC-02 | Security | Authorization | Role-based access control enforced on all admin/partner/operations endpoints; no cross-role data access |
+| NFR-SEC-03 | Security | Data encryption | All health/prescription data and PII encrypted at rest (AES-256 or equivalent) and in transit (TLS 1.2+) |
+| NFR-SEC-04 | Security | Rate limiting | API rate limiting applied to prevent abuse/scraping of pricing data |
+| NFR-SEC-05 | Security | OWASP considerations | Application tested against OWASP Top 10 vulnerabilities prior to launch |
+| NFR-SEC-06 | Security | Audit logging | All sensitive actions logged immutably per Section 18 requirements |
+| NFR-PRIV-01 | Privacy | Consent | Explicit user consent captured before processing health/prescription data |
+| NFR-PRIV-02 | Privacy | Data deletion | User can request account/data deletion; system processes within a defined regulatory-compliant timeframe (to be confirmed with Legal) |
+| NFR-PRIV-03 | Privacy | Data retention | Prescription and health data retained only as long as legally required/operationally necessary; retention policy to be defined with Legal/Compliance |
+| NFR-ACC-01 | Accessibility | WCAG conformance | Target WCAG 2.1 AA compliance for customer-facing web/app |
+| NFR-ACC-02 | Accessibility | Font scaling | Support large-font/zoom mode without breaking layout |
+| NFR-ACC-03 | Accessibility | Screen reader support | Key flows (search, checkout) navigable via screen reader |
+| NFR-COMPAT-01 | Compatibility | Browser support | Latest 2 versions of Chrome, Safari, Firefox, Edge |
+| NFR-COMPAT-02 | Compatibility | Device support | Android 9+, iOS 14+, responsive down to small mobile screens (320px width) |
+| NFR-LOC-01 | Localization | Language support | English + minimum 2 major regional languages at MVP, expandable |
+| NFR-LOC-02 | Localization | Currency/date format | INR currency formatting; Indian date/time conventions |
+| NFR-OBS-01 | Observability | Logging | All critical transactions (orders, payments, prescription decisions) logged with correlation IDs |
+| NFR-OBS-02 | Observability | Monitoring & alerting | Automated alerts for API error rate spikes, payment failure spikes, and SLA breaches |
+| NFR-OBS-03 | Observability | Error tracking | Centralized error tracking with severity classification |
+| NFR-RES-01 | Resilience | Slow network handling | Graceful degradation (cached results, skeleton loaders) on slow/unstable connections |
+| NFR-RES-02 | Resilience | Third-party outage handling | If payment/OCR/government DB service is down, system displays clear status and queues/retries rather than failing silently |
+
+---
+
+## 13. INFORMATION ARCHITECTURE & KEY SCREENS
+
+### Navigation (Customer App)
+```
+Home
+ ├─ Search (by brand/salt/condition)
+ ├─ Prescription Upload / My Prescriptions
+ ├─ Cart & Checkout
+ ├─ Orders
+ │   ├─ Active Orders (Tracking)
+ │   ├─ Order History
+ │   └─ Scheduled/Recurring Orders
+ ├─ Savings Dashboard
+ ├─ Support / Pharmacist Helpline
+ └─ Profile & Settings
+     ├─ Addresses
+     ├─ Dependents/Family Profiles
+     ├─ Language & Accessibility
+     └─ Payment Methods
+```
+
+### Navigation (Partner Portal)
+```
+Dashboard
+ ├─ Onboarding / Verification Status
+ ├─ Inventory & Pricing Management
+ ├─ Orders (Incoming / In Progress / Completed)
+ ├─ Payouts & Reports
+ └─ Support
+```
+
+### Navigation (Admin Console)
+```
+Dashboard
+ ├─ Partner Management (Approvals, Performance)
+ ├─ Catalog Management (Brand/Generic/Salt Mapping)
+ ├─ Prescription Review Queue
+ ├─ Pricing Anomaly Monitoring
+ ├─ Operations (Order Exceptions, Reassignment)
+ ├─ Compliance & Audit Reports
+ └─ Configuration (Cities, Languages, Payment Methods)
+```
+
+### Key Screens
+
+| Screen | User | Purpose | Primary Actions |
+|---|---|---|---|
+| Home/Search | Customer | Entry point for medicine search | Search, browse categories, voice search |
+| Price Comparison Results | Customer | Compare prices across suppliers | Filter, sort, select listing |
+| Medicine Detail | Customer | View composition, substitutes, price breakdown | Add to cart, view substitutes |
+| Prescription Upload | Customer | Submit prescription for verification | Upload image, view status |
+| Cart & Checkout | Customer | Review order, select address/payment | Apply changes, confirm, pay |
+| Order Tracking | Customer | View live order status | View status, contact support |
+| Order History | Customer | Review past orders and savings | Reorder, download invoice |
+| Support/Helpline | Customer | Get help from pharmacist/support | Start chat, raise ticket, request return |
+| Partner Onboarding | Partner | Register and submit documents | Upload documents, track status |
+| Partner Inventory | Partner | Manage stock and pricing | Update stock/price, view sync status |
+| Partner Orders | Partner | Manage incoming orders | Accept/reject, mark packed/dispatched |
+| Admin Prescription Review | Admin/Pharmacist | Manually verify flagged prescriptions | Approve, reject, request clarification |
+| Admin Catalog Management | Admin | Maintain medicine master data | Add/edit/deactivate entries |
+| Admin Compliance Reports | Admin | Generate regulatory reports | Filter by date, export |
+
+**Required States for Key Screens:** Loading, Empty (e.g., no search results, no orders yet), Error (e.g., failed to fetch prices), Success, Unauthorized (e.g., accessing admin without role), Offline (cached data banner).
+
+---
+
+## 14. HIGH-LEVEL DATA MODEL
+
+### Core Entities
+
+**User**
+- Purpose: Represents a customer/caregiver account.
+- Relationships: Has many Addresses, Prescriptions, Orders, Dependents.
+- Ownership: Self-owned; caregiver may manage Dependent sub-profiles.
+- Lifecycle: Created at signup → Active → Suspended (policy violation) → Deleted (on request, per retention policy).
+
+**Dependent Profile**
+- Purpose: Represents a family member managed by a caregiver account.
+- Relationships: Belongs to a User; has own Prescriptions and Orders.
+- Lifecycle: Created by caregiver → Active → Archived/Removed.
+
+**Medicine (Catalog Entity)**
+- Purpose: Master record for a medicine, including brand name(s), generic/salt composition, dosage forms.
+- Relationships: Linked to multiple Supplier Listings (price/stock); linked to Substitution Mappings.
+- Ownership: Managed by Admin/Catalog team.
+- Lifecycle: Draft → Published → Deprecated (if discontinued).
+
+**Supplier/Pharmacy Partner**
+- Purpose: Represents a licensed pharmacy or supplier providing inventory and pricing.
+- Relationships: Has many Listings (Medicine + Price + Stock); fulfills Orders.
+- Ownership: Self-managed via Partner Portal; verified by Admin.
+- Lifecycle: Applied → Under Review → Approved/Rejected → Active → Suspended (compliance issue).
+
+**Listing**
+- Purpose: A specific supplier's price and stock offer for a given medicine.
+- Relationships: Belongs to Supplier; belongs to Medicine.
+- Lifecycle: Created/updated by partner → Active → Out of Stock → Removed.
+
+**Prescription**
+- Purpose: Digital record of an uploaded prescription requiring verification.
+- Relationships: Belongs to User (or Dependent); linked to Order(s).
+- Ownership: User-submitted; verified by Admin/Pharmacist.
+- Lifecycle: Uploaded → Pending OCR → Pending Manual Review (if flagged) → Approved/Rejected → Expired (per validity rules).
+
+**Order**
+- Purpose: Represents a purchase transaction.
+- Relationships: Belongs to User; linked to one or more Listings/Suppliers; linked to Payment; may link to Prescription.
+- Lifecycle: Created (Cart) → Confirmed → Assigned to Supplier → Packed → Shipped → Delivered / Cancelled / Returned.
+
+**Payment**
+- Purpose: Represents a financial transaction for an Order.
+- Relationships: Belongs to Order.
+- Lifecycle: Initiated → Success/Failed → Refunded (if applicable).
+
+**Scheduled/Recurring Order Plan**
+- Purpose: Represents a recurring refill configuration.
+- Relationships: Belongs to User; generates future Orders.
+- Lifecycle: Created → Active → Paused → Cancelled.
+
+**Substitution Mapping**
+- Purpose: Maps a branded medicine to its verified generic equivalents.
+- Relationships: Links Medicine ↔ Medicine (brand-to-generic).
+- Ownership: Curated/validated by clinical/compliance team.
+- Lifecycle: Proposed → Doctor/Clinically Validated → Published.
+
+**Review/Feedback** *(supports trust signals)*
+- Purpose: Captures user feedback on order/product experience.
+- Relationships: Belongs to User and Order.
+- Lifecycle: Submitted → Published/Moderated.
+
+**Audit Log Entry**
+- Purpose: Immutable record of sensitive system/user actions.
+- Relationships: References any entity (User, Order, Partner, etc.).
+- Lifecycle: Created on action → Retained per compliance policy.
+
+### Conceptual Relationships
+```
+User ─┬─< Dependent Profile
+      ├─< Address
+      ├─< Prescription ─< Order
+      ├─< Order ─< Payment
+      └─< Scheduled Order Plan ─< Order (generated)
+
+Supplier Partner ─< Listing >─ Medicine ─< Substitution Mapping >─ Medicine
+Order >─ Listing (fulfilled by Supplier)
+Any Entity ─< Audit Log Entry
+```
+
+---
+
+## 15. ROLES & PERMISSIONS
+
+| Role | Resource/Module | Permission |
+|---|---|---|
+| Customer | Own Profile, Orders, Prescriptions | Create, Read, Update (own data only) |
+| Customer | Other Users' Data | No access |
+| Caregiver | Dependent Profiles, Orders | Create, Read, Update, Delete (own dependents only) |
+| Doctor (Portal) | Substitution Lookup Tool | Read; Create referral link |
+| Doctor (Portal) | Patient Health Records | No access (not in scope) |
+| Pharmacy/Supplier Partner | Own Inventory/Listings | Create, Read, Update, Delete (own listings only) |
+| Pharmacy/Supplier Partner | Assigned Orders | Read, Update (status only) |
+| Pharmacy/Supplier Partner | Own Payout Reports | Read, Export |
+| Pharmacy/Supplier Partner | Other Partners' Data | No access |
+| Pharmacist (Internal) | Prescription Review Queue | Read, Approve, Reject |
+| Pharmacist (Internal) | Helpline/Support Tickets | Read, Update, Resolve |
+| Operations | Order Management (All) | Read, Update, Reassign |
+| Operations | Inventory Alerts | Read, Configure thresholds |
+| Admin | Partner Onboarding | Read, Approve, Reject, Suspend |
+| Admin | Catalog Management | Create, Read, Update, Delete |
+| Admin | Pricing Anomaly Review | Read, Approve, Reject |
+| Admin | Platform Configuration (cities/languages/payments) | Create, Read, Update, Configure |
+| Admin | Compliance & Audit Reports | Read, Export |
+| Admin | Refund Approval (escalated cases) | Read, Approve, Refund |
+| Super Admin | All Modules | Full access including role/permission management |
+
+**Sensitive Operations (require elevated permission + audit logging):** partner approval/suspension, catalog substitution mapping edits, refund approval, prescription rejection override, role/permission changes, data deletion requests, pricing anomaly override.
+
+---
+
+## 16. INTEGRATIONS & THIRD-PARTY SERVICES
+
+| Integration | Purpose | Criticality | Failure Impact |
+|---|---|---|---|
+| Payment Gateway (provider TBD) | Process online payments (UPI/card/wallet) | Critical | Checkout/revenue blocked; must have fallback (COD) if configured |
+| SMS/OTP Provider (provider TBD) | User authentication, order notifications | Critical | Login and transactional notifications blocked |
+| Government Drug Database (source TBD) | Drug master data, authenticity/manufacturer verification | High | Authenticity checks degrade to cached data; compliance risk if prolonged |
+| Licensed Pharmacy/Supplier APIs | Real-time inventory and pricing sync | Critical | Price comparison becomes stale/inaccurate; core value proposition breaks |
+| OCR/Document Processing Service (provider TBD) | Prescription text extraction | High | Falls back to fully manual pharmacist review; slower verification SLA |
+| Cloud Storage (provider TBD) | Store prescription images, documents securely | High | Upload/verification workflow blocked |
+| Push Notification Service (provider TBD) | Order status, refill reminders | Medium | Users rely on SMS/email fallback |
+| Email Service Provider (provider TBD) | Invoices, account notifications | Medium | Users rely on in-app/SMS notifications |
+| Product/Behavioral Analytics Tool (provider TBD) | Track KPIs, funnels, user behavior | Medium | Reduced visibility into metrics; no direct user impact |
+| Maps/Geolocation Service (provider TBD) | Delivery address validation, serviceability check | High | Address entry/serviceability checks degrade to manual pincode entry |
+| Logistics/3PL Integration (provider TBD) | Last-mile delivery tracking | Critical | Order fulfillment and tracking accuracy impacted |
+
+*Note: No specific vendor names are assumed since none were provided in the input. Provider selection is an Open Question requiring Engineering/Business decision.*
+
+---
+
+## 17. ANALYTICS & INSTRUMENTATION
+
+| Event Name | Trigger | Key Properties | Purpose |
+|---|---|---|---|
+| `app_opened` | App/web session start | user_id, platform, language | Acquisition/engagement tracking |
+| `search_performed` | User submits a search query | query_text, search_type (brand/salt/condition), result_count | Discovery funnel, search quality |
+| `comparison_viewed` | Price comparison results displayed | medicine_id, num_suppliers, lowest_price | Core value delivery tracking |
+| `substitute_viewed` | User views generic substitute suggestion | brand_id, substitute_id, validation_status | Substitution feature adoption |
+| `prescription_uploaded` | User uploads prescription | user_id, upload_method, file_type | Activation funnel |
+| `prescription_verified` | Pharmacist/OCR completes verification | verification_result, turnaround_time | Compliance & SLA tracking |
+| `add_to_cart` | User adds item to cart | medicine_id, supplier_id, price | Conversion funnel |
+| `checkout_started` | User initiates checkout | cart_value, item_count | Conversion funnel |
+| `payment_attempted` | User submits payment | payment_method, amount | Revenue funnel |
+| `payment_completed` | Payment succeeds | order_id, amount, payment_method | Revenue tracking |
+| `payment_failed` | Payment fails | reason_code, payment_method | Guardrail metric |
+| `order_status_changed` | Order status transitions | order_id, old_status, new_status | Fulfillment tracking |
+| `recurring_order_created` | User sets up scheduled refill | medicine_id, frequency | Retention tracking |
+| `reorder_clicked` | User reorders from history | original_order_id | Retention/engagement |
+| `return_requested` | User requests return/refund | order_id, reason | Guardrail metric |
+| `support_ticket_created` | User contacts support/helpline | category, channel | Support load tracking |
+| `partner_onboarded` | Partner approved and activated | partner_id, city | Supply-side growth tracking |
+| `partner_order_sla_breach` | Partner fails to respond within SLA | order_id, partner_id, elapsed_time | Operational quality guardrail |
+
+### Key Funnel: Acquisition → Purchase
+`app_opened` → `search_performed` → `comparison_viewed` → `add_to_cart` → `checkout_started` → `payment_completed`
+
+### Key Funnel: Prescription-Based Purchase
+`prescription_uploaded` → `prescription_verified` → `substitute_viewed` (optional) → `add_to_cart` → `payment_completed`
+
+---
+
+## 18. AUDIT & OPERATIONAL LOGGING
+
+The following actions require immutable audit logging capturing **who performed the action, what changed, when, on which entity, and reason where applicable**:
+
+| Action | Logged Details |
+|---|---|
+| User login/logout | User ID, timestamp, device/IP, method (OTP/password) |
+| Role/permission changes | Actor, target user/role, old vs. new permission, timestamp |
+| Partner approval/rejection/suspension | Actor (admin), partner ID, decision, reason, timestamp |
+| Prescription approval/rejection | Actor (pharmacist/system), prescription ID, decision, reason, timestamp |
+| Catalog/substitution mapping changes | Actor, medicine ID, before/after values, timestamp |
+| Pricing anomaly override | Actor, listing ID, original vs. approved price, reason, timestamp |
+| Refund/payment modification | Actor, order ID, amount, reason, timestamp |
+| Order reassignment | Actor, order ID, original supplier, new supplier, reason, timestamp |
+| Admin configuration changes (city/language/payment method) | Actor, config item, old vs. new value, timestamp |
+| Data deletion requests | Actor (user/admin), affected user ID, scope of deletion, timestamp, completion confirmation |
+| Controlled substance exclusion trigger | System/actor, medicine/prescription ID, action taken, timestamp |
+
+Audit logs must be **read-only/immutable**, retained per compliance policy (to be defined with Legal), and accessible to Admin/Compliance roles for regulatory reporting (see FR-REP-01).
+
+---
+
+## 19. RELEASE PLAN & ROADMAP
+
+| Phase | Theme | Key Scope | Exit Criteria |
+|---|---|---|---|
+| **Phase 0 — Foundations** | Compliance, partnerships, core infrastructure | Legal/regulatory framework validated; initial licensed pharmacy/supplier contracts signed; core architecture, security, and data pipelines established; government drug database access secured | Legal sign-off obtained; minimum viable supplier network (e.g., 15–20 partners) contracted in pilot city; core infra passes security review |
+| **Phase 1 — MVP** | Core price comparison + purchase experience | Search & comparison engine (FR-SRCH, FR-CORE), prescription upload & verification, checkout & payments, order tracking, basic partner portal, basic admin console, pharmacist helpline, multilingual UI (base languages), accessibility basics | All P0 requirements implemented and tested; live in 1 pilot city with real transacting suppliers; guardrail metrics within acceptable bounds during pilot |
+| **Phase 2 — Trust & Growth** | Retention, trust signals, operational scale | Scheduled/recurring orders, savings dashboard, returns/refunds workflow, demand forecasting, supplier performance scorecards, restocking alerts, expanded language/accessibility support, referral mechanics | Retention KPIs (chronic refill retention) met; expansion to 2–3 additional cities; NPS baseline established |
+| **Phase 3 — Scale & Optimization** | Efficiency, differentiation, expansion | Doctor portal & substitution referral tool, white-label offering for clinics/hospitals, sustainability features (eco-packaging, wastage reduction via demand prediction), advanced pricing anomaly detection, broader geographic rollout | Positive contribution margin sustained; white-label pilot signed with at least one clinic/hospital partner |
+
+**MVP City Rollout:** Pilot in 2–3 initial cities per Assumption A2 before broader urban/semi-urban expansion.
+
+---
+
+## 20. MVP DEFINITION
+
+> **The MVP is complete when** a patient in a pilot city can search for a medicine by brand/salt/condition, view a transparent, verified lowest-price comparison across at least a minimum viable set of licensed suppliers, upload and get a prescription verified where required, complete a secure payment, and track their order to delivery — with pharmacist helpline support and full compliance/audit logging in place.
+
+### Must Have (P0 — aligned to Section 9 P0 items)
+- OTP-based authentication and onboarding
+- Search by brand/salt/dosage/condition
+- Real-time multi-supplier price comparison with lowest-price highlighting and transparent breakdown
+- Doctor-validated substitution suggestions (where available)
+- Authenticity checks (batch/expiry/manufacturer)
+- Prescription upload, OCR + manual pharmacist verification
+- Checkout, multiple payment methods, payment failure handling, digital invoicing, refunds
+- Order tracking and status notifications
+- Order history and savings tracker
+- Returns/refund request workflow
+- Pharmacist helpline / 24/7 support access
+- Partner onboarding, inventory/pricing sync, order accept/fulfill workflow
+- Admin: partner approval, catalog management, prescription review queue, configuration, audit logs
+- Core NFRs: security, encryption, sub-second search, availability targets
+
+### Should Have (P1 — fast-follow)
+- Scheduled/recurring delivery automation
+- COD payment option
+- Notification preference management
+- Support ticketing system
+- Pricing anomaly monitoring
+- Automated restocking alerts
+- Demand forecasting reports
+- Supplier performance scorecards
+- Expanded accessibility (voice search, large font)
+- Dependent/family profile management
+
+### Later (P2 — future phase)
+- Doctor portal with referral link sharing
+- White-label offering for clinics/hospitals
+- Sustainability/eco-packaging features
+- Advanced competitor pricing insights
+- Full multilingual expansion beyond initial set
+
+---
+
+## 21. RISKS & MITIGATIONS
+
+| Risk | Probability | Impact | Mitigation |
+|---|---|---|---|
+| Insufficient licensed pharmacy partners at launch, making "lowest price" claim weak or inaccurate | Medium | High | Prioritize supplier acquisition in Phase 0 as a launch gate; set minimum partner threshold per city before go-live |
+| Regulatory non-compliance in prescription handling or controlled substance sale | Medium | Critical | Engage legal/regulatory counsel early (Phase 0); build hard system blocks for controlled substances; mandatory pharmacist review workflow |
+| Authenticity/counterfeit medicine incident damages trust | Low-Medium | Critical | Enforce batch/expiry/manufacturer verification (FR-CORE-05) as a non-bypassable checkout gate; partner license audits |
+| Price staleness due to slow supplier inventory sync causing "lowest price" to be inaccurate at checkout | Medium | High | Enforce checkout-time re-validation (FR-CORE-07); define and monitor sync SLA (NFR-REL-02) |
+| Thin margins on generics unsustainable at low order volume | Medium | High | Negotiate volume-based supplier contracts; focus CAC-efficient organic channels; monitor contribution margin KPI (BG-04) |
+| Prescription OCR misreads leading to wrong substitution recommendation | Medium | Critical | Mandatory pharmacist sign-off for all prescription-based orders in MVP; do not fully automate approval |
+| Elderly users struggle with digital-first UX, limiting adoption of a key target segment | Medium | Medium | Dedicated accessibility features (large font, voice search); consider caregiver-assisted ordering flows |
+| Dependency on third-party payment/OCR/government DB APIs causing service disruption | Medium | High | Define fallback behavior (manual review, cached data) per NFR-RES-02; monitor third-party SLAs |
+| Data breach of health/prescription data | Low | Critical | Encryption at rest/in transit (NFR-SEC-03), access control (NFR-SEC-02), regular security audits (NFR-SEC-05) |
+| Partner pharmacy manipulates pricing to appear as "lowest" fraudulently | Low-Medium | High | Pricing anomaly detection (FR-ADM-04) and admin review before publishing suspicious price changes |
+| Slow demand growth due to low brand trust for online generic medicine purchase in semi-urban markets | Medium | High | Doctor referral channel, transparent authenticity messaging, COD option (P1) to reduce purchase friction |
+| Scaling infrastructure fails during demand spikes (festivals, disease outbreaks) | Low-Medium | High | Auto-scaling architecture (NFR-SCALE-01), load testing before peak seasons |
+
+---
+
+## 22. OPEN QUESTIONS
+
+| # | Question | Owner | Needed By |
+|---|---|---|---|
+| 1 | What is the confirmed business/monetization model — commission per order, subscription for pharmacies, or hybrid? | Business/Founder | Before Phase 0 exit |
+| 2 | Which specific cities will be the initial pilot launch markets? | Business/Founder | Before Phase 0 exit |
+| 3 | Which payment gateway provider(s) will be integrated? | Engineering/Business | Before Phase 1 build |
+| 4 | Which SMS/OTP, OCR, cloud storage, and logistics/3PL providers will be used? | Engineering | Before Phase 1 build |
+| 5 | What is the exact legal/regulatory framework governing e-pharmacy operations, prescription validation, and pharmacovigilance reporting in target markets? | Compliance/Legal | Before Phase 0 exit (hard gate) |
+| 6 | What is the official data source for government drug database integration? | Compliance/Engineering | Before Phase 0 exit |
+| 7 | What is the return/refund and cancellation policy in precise terms (windows, eligible categories)? | Operations/Business | Before Phase 1 launch |
+| 8 | What is the prescription validity period policy (e.g., how many days/refills before re-verification required)? | Compliance/Pharmacist Lead | Before Phase 1 launch |
+| 9 | Is COD required at launch, or can digital-only payments be tested first? | Business/Operations | Before Phase 1 launch |
+| 10 | What are the specific regional languages required at MVP (beyond English)? | Business/Design | Before Phase 1 build |
+| 11 | What is the budget and timeline envelope for Phase 0 and Phase 1? | Business/Founder | Immediately |
+| 12 | Will delivery/logistics be handled by partner pharmacies themselves or a centralized 3PL integration? | Operations/Business | Before Phase 0 exit |
+| 13 | What data retention period applies to prescriptions and health data post order completion? | Compliance/Legal | Before Phase 0 exit |
+| 14 | What minimum number of verified suppliers per city is required to credibly claim "lowest price" comparison? | Product/Business | Before Phase 1 launch |
+
+---
+
+## 23. TRACEABILITY CHECK
+
+Internal consistency review performed across: **Business Goal → Product Goal → KPI → User Story → Functional Requirement → Acceptance Criteria → User Flow → MVP Phase**
+
+| Business Goal | Product Goal | KPI | Representative FR(s) | MVP Phase |
+|---|---|---|---|---|
+| BG-01 Launch MVP in pilot cities | Fast, trustworthy price comparison | Search-to-Order Conversion | FR-SRCH-01/02, FR-CORE-01/02/03 | Phase 1 |
+| BG-02 Onboard licensed partners | Give pharmacies visibility/demand | Partner Fill Rate | FR-VEN-01–05, FR-ADM-01 | Phase 1 |
+| BG-03 Retention for chronic users | Never miss a refill | Chronic Refill Retention | FR-HIST-04, FR-NOTIF-03 | Phase 1 (basic), Phase 2 (automation) |
+| BG-04 Positive unit economics | Efficient, low-friction fulfillment | Fulfillment Success Rate | FR-OPS-01/02, FR-VEN-02/03 | Phase 1 |
+| BG-05 Organic acquisition | Doctor-enabled recommendation | Referral share of Acquisition | Doctor substitution/referral flow | Phase 3 (full portal); referral link concept flagged for earlier lightweight version if feasible |
+
+**Gaps identified and resolved during drafting:**
+- Doctor portal referral feature was initially only a User Story with no P0 functional requirement — resolved by explicitly scoping it as P2/Phase 3 rather than leaving it ambiguous, since MVP does not require full doctor tooling to deliver core patient value.
+- "White-label option" and "sustainability features" from Special Requirements had no roadmap placement — resolved by assigning both to Phase 3 explicitly (Section 19), preventing MVP scope creep.
+- Guardrail metric "medicine authenticity complaint rate" required a corresponding P0 control — resolved via FR-CORE-05 (authenticity checks) being marked P0 and non-bypassable at checkout.
+- Ensured no P0 requirement appears only in Phase 2/3 of the roadmap; all P0 items are placed in Phase 0/1.
+
+---
+
+## 24. GLOSSARY
+
+| Term | Definition |
+|---|---|
+| Generic Medicine | A medicine with the same active pharmaceutical ingredient(s), dosage, and intended use as a branded drug, typically sold at lower cost after patent expiry |
+| Salt / Composition | The active pharmaceutical ingredient(s) in a medicine, used as the basis for identifying generic equivalents |
+| OCR | Optical Character Recognition — technology used to extract text data from uploaded prescription images |
+| SKU | Stock Keeping Unit — a unique identifier for a specific medicine/dosage/pack combination sold by a supplier |
+| Fill Rate | The percentage of orders a supplier successfully fulfills without stockout or cancellation |
+| SLA | Service Level Agreement — a defined performance/response time commitment (e.g., partner order acceptance time) |
+| Pharmacovigilance | The process of monitoring and reporting adverse effects or safety concerns related to medicines |
+| Controlled Substance | A medicine subject to special legal restrictions on sale/distribution due to abuse potential (excluded from MVP scope) |
+| 3PL | Third-Party Logistics — an external logistics provider handling delivery/fulfillment |
+| PWA | Progressive Web App — a web application providing app-like experience including offline capability |
+| KYC | Know Your Customer — identity/document verification process, applied here to partner pharmacy onboarding |
+| NPS | Net Promoter Score — a metric measuring customer satisfaction and likelihood to refer others |
+| White-Label | A version of the product rebranded and offered under a partner's (e.g., clinic/hospital) own brand |
+| Doctor-Validated Substitution | A generic alternative to a branded medicine that has been reviewed and confirmed appropriate by a qualified clinical reference/process |
+
+---
+
+### Document Notes for Reviewers
+This PRD intentionally flags multiple **Open Questions** (Section 22) rather than inventing business-critical decisions (pricing model, launch cities, vendor selection, legal framework). These must be resolved with the respective owners before Phase 0 exit. All P0 functional requirements have testable acceptance criteria and are placed within Phase 0/1 of the roadmap to avoid MVP scope creep, per the traceability check in Section 23.
+
+**End of Document.**

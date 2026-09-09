@@ -252,6 +252,7 @@ chore: upgrade tailwindcss to v4.2
 | `vite`               | Build tool                         | Dev        |
 | `tsx`                | TypeScript execution               | Dev        |
 | `esbuild`            | Fast bundling                      | Dev        |
+| `recharts`           | Analytics & adherence charts       | Production |
 
 ---
 

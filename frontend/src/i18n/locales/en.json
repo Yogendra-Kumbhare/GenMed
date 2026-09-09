@@ -1,0 +1,117 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "cabinet": "Medicine Cabinet",
+    "prescriptions": "Prescriptions",
+    "orders": "Orders & Tracking",
+    "savings": "Savings",
+    "dependents": "Dependents",
+    "notifications": "Notifications",
+    "analytics": "Analytics",
+    "settings": "Settings"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "empty": "No items found",
+    "confirm": "Confirm",
+    "back": "Back",
+    "done": "Done",
+    "submit": "Submit",
+    "refresh": "Refresh",
+    "viewAll": "View All",
+    "learnMore": "Learn More"
+  },
+  "auth": {
+    "login": "Sign In",
+    "register": "Create Account",
+    "logout": "Sign Out",
+    "email": "Email Address",
+    "password": "Password",
+    "name": "Full Name",
+    "welcomeBack": "Welcome back, {{name}}!"
+  },
+  "dashboard": {
+    "title": "Today's Medication Schedule",
+    "adherenceRate": "Adherence Rate",
+    "activeMeds": "Active Medications",
+    "dosesRemaining": "Doses Remaining",
+    "markTaken": "Mark Taken",
+    "markSkipped": "Mark Skipped",
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "evening": "Evening",
+    "bedtime": "Bedtime"
+  },
+  "cabinet": {
+    "title": "Medicine Cabinet",
+    "addMedication": "Add Medication",
+    "daysLeft": "{{count}} days left",
+    "pillsLeft": "{{count}} pills",
+    "refillsLeft": "{{count}} refills",
+    "lowSupply": "Low Supply",
+    "requestRefill": "Request Refill"
+  },
+  "prescriptions": {
+    "title": "Prescriptions",
+    "uploadRx": "Upload Rx",
+    "active": "Active",
+    "pendingRenewal": "Pending Renewal",
+    "expiringSoon": "Expiring Soon",
+    "transferred": "Transferred"
+  },
+  "orders": {
+    "title": "Orders & Tracking",
+    "orderNumber": "Order #{{number}}",
+    "trackDelivery": "Track Delivery",
+    "reorder": "Reorder"
+  },
+  "savings": {
+    "title": "Generic Savings",
+    "youSave": "You Save {{pct}}%",
+    "brandPrice": "Brand Price",
+    "genericPrice": "Generic Price"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark All Read",
+    "unread": "{{count}} unread"
+  },
+  "analytics": {
+    "title": "Adherence & Analytics",
+    "overallAdherence": "Overall Adherence",
+    "currentStreak": "Current Streak",
+    "dosesTaken": "Doses Taken",
+    "refillForecast": "Refill Forecast",
+    "days": "{{count}} days",
+    "streakDays": "{{count}} days streak"
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "preferences": "Preferences",
+    "theme": "Theme",
+    "language": "Language",
+    "autoRefill": "Auto Refill",
+    "genericSubstitution": "Generic Substitution",
+    "smsDoseReminders": "SMS Dose Reminders",
+    "twoFactorAuth": "Two-Factor Authentication"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "en": "English",
+    "es": "Español",
+    "hi": "हिन्दी"
+  }
+}

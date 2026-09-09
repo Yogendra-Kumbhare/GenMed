@@ -438,3 +438,115 @@ Use **Vite Dev Server Proxy** in development (forwarding `/api` requests to `htt
 - `vite.config.ts` configured with `server.proxy` for `/api`.
 - Package scripts added: `dev:all`, `server`.
 - Production build serves `dist/` with fallback to `dist/index.html`.
+
+---
+
+## ADR-013: Phase 3 Intelligence Layer — Gemini API for Drug Interactions and Analytics
+
+| Field                  | Details                          |
+| ---------------------- | -------------------------------- |
+| **Date**               | 2026-09-09                       |
+| **Status**             | ✅ Accepted                       |
+| **Deciders**           | Engineering team                 |
+
+### Context / Problem
+Phase 3 introduces AI-powered medication intelligence (drug interaction checking, interaction severity classification) and data-driven analytics (adherence trends, refill predictions). The project needs a consistent approach for where AI inference lives, which model is used, and how analytics data is sourced and rendered.
+
+### Decision
+1. **AI inference (drug interactions, consultation context)** — route all Gemini API calls through the Express backend (`POST /api/ai/consult`, `POST /api/ai/interactions`). The frontend never holds the API key.
+2. **Analytics data** — compute adherence metrics, streaks, and refill forecasts server-side via Prisma aggregate queries. Return pre-computed summaries to the client; avoid heavy computation in the browser.
+3. **Charting** — use **Recharts** as the single charting library (React-native, composable, tree-shakable, ~180 KB gzipped).
+4. **Prescription OCR** — use **Gemini's multimodal input** (image → structured JSON) rather than a separate Vision API, keeping the vendor surface minimal.
+
+### Reasoning
+- Keeping AI keys server-side is already established by ADR-005 and ADR-011; this ADR extends that pattern to new endpoints rather than creating a new pattern.
+- Server-side aggregation prevents sending large raw dose histories to the client just for charting.
+- Recharts is the most widely adopted React charting library with first-class TypeScript support and no canvas dependency, which aligns with the project's accessibility requirements.
+- Gemini multimodal handles OCR without adding a second Google Cloud service, consistent with ADR-005.
+
+### Alternatives Considered
+| Alternative                          | Pros                                  | Cons                                                  |
+| ------------------------------------ | ------------------------------------- | ----------------------------------------------------- |
+| Client-side Gemini calls             | Less latency (no proxy hop)           | Exposes `GEMINI_API_KEY` in the browser bundle        |
+| Google Cloud Vision for OCR          | Purpose-built OCR accuracy            | Adds a second GCP service, separate billing, more setup |
+| Chart.js / D3.js                     | More customisable                     | Chart.js requires canvas; D3 is imperative and verbose |
+| Client-side adherence computation    | No extra API call for stats           | Sends full dose history to browser; poor on slow connections |
+
+### Impact on Project
+- Two new server routes: `POST /api/ai/interactions` (drug interaction check) and `GET /api/analytics/adherence` (adherence summary).
+- New Zod schemas: `interactionCheckSchema` (array of medication names) and query params for the analytics endpoint (date range, dependentId).
+- Recharts added to production dependencies — document in `rules.md` approved dependencies table.
+- `src/server/routes/` gains `ai.routes.ts` and `analytics.routes.ts`.
+- Frontend gains `src/components/pages/AnalyticsPage.tsx` and interaction alert UI in `MedicationDetailModal.tsx`.
+- No new environment variables required beyond the existing `GEMINI_API_KEY`.
+
+---
+
+## ADR-014: Prisma v7 Adapter Pattern Migration
+
+| Field                  | Details                          |
+| ---------------------- | -------------------------------- |
+| **Date**               | 2026-09-09                       |
+| **Status**             | ✅ Accepted                       |
+| **Deciders**           | Engineering team                 |
+
+### Context / Problem
+Prisma v7 removed the `url` and `directUrl` fields from `datasource` blocks in `schema.prisma`. Connection strings must now be passed via a `prisma.config.ts` file using a database adapter, breaking the existing schema on `prisma generate`.
+
+### Decision
+1. Remove `url` and `directUrl` from `schema.prisma` datasource block (keep `provider = "postgresql"` only).
+2. Create `prisma.config.ts` at project root using `defineConfig` with a `PrismaPg` adapter that reads `DIRECT_URL` / `DATABASE_URL` at runtime.
+3. Update `src/server/db/client.ts` to instantiate `PrismaClient` with `new PrismaPg(connectionString)` adapter.
+4. Add `@prisma/adapter-pg` and `pg` as production dependencies.
+5. Exclude `prisma.config.ts` from `tsconfig.json` (it is run by the Prisma CLI, not the app bundler).
+
+### Reasoning
+- Required for compatibility with Prisma v7.x — no alternative without downgrading.
+- The adapter pattern gives explicit control over the pg connection pool.
+- Excluding `prisma.config.ts` from app TypeScript avoids type conflicts between the Prisma CLI's type declarations and the app's bundler module resolution.
+
+### Alternatives Considered
+| Alternative              | Pros                          | Cons                                   |
+| ------------------------ | ----------------------------- | -------------------------------------- |
+| Downgrade to Prisma 5.x  | No migration required         | Misses v7 performance and features     |
+| Use Prisma Accelerate    | Zero-config URL handling      | Requires Prisma Cloud account          |
+
+### Impact on Project
+- `prisma.config.ts` is the new connection configuration source of truth for Prisma CLI commands (`migrate`, `db push`, `generate`).
+- `DATABASE_URL` is used by the runtime `PrismaClient`; `DIRECT_URL` is used for migrations via the config file.
+- `.env.example` remains unchanged — both variables are still required.
+
+---
+
+## ADR-015: SettingsPage Sub-Component Architecture & Phase 4 Scale Refactor
+
+| Field                  | Details                          |
+| ---------------------- | -------------------------------- |
+| **Date**               | 2026-09-09                       |
+| **Status**             | ✅ Accepted                       |
+| **Deciders**           | Engineering team                 |
+
+### Context / Problem
+`SettingsPage.tsx` had grown into an 1119-line monolithic component containing all user profile fields, delivery addresses, payment methods, pharmacy preferences, notifications, security settings, and data export logic. This negatively impacted maintainability, testability, and readable code organisation.
+
+### Decision
+Split `SettingsPage.tsx` into six domain-focused sub-components located in `src/components/settings/`:
+1. `ProfileSection.tsx` — Personal & medical profile fields.
+2. `DeliverySection.tsx` — Address management with modal for creation/deletion.
+3. `PaymentSection.tsx` — HSA/FSA and credit card management modal flow.
+4. `PharmacySection.tsx` — Auto-refill, generic substitution, and child caps toggles.
+5. `NotificationSection.tsx` — SMS, email, push notifications (PushToggle), LanguageSwitcher, and ThemeToggle controls.
+6. `SecuritySection.tsx` — 2FA toggle, change password modal, data export, and logout.
+
+`SettingsPage.tsx` becomes a lightweight ~140-line orchestrator that coordinates shared user settings and profile state.
+
+### Reasoning
+- Follows the Single Responsibility Principle: each section owns its internal dialog modals, form fields, and validation logic.
+- Enables granular unit testing for specific settings flows without mounting the entire 1100+ line tree.
+- Co-locates `LanguageSwitcher` and `ThemeToggle` into the Appearance subsection of `NotificationSection` while allowing Header access via a compact variant.
+
+### Impact on Project
+- Modular directory created at `src/components/settings/`.
+- Reduced `SettingsPage.tsx` from 1119 lines to ~140 lines.
+- High testability: ThemeToggle, LanguageSwitcher, and PushNotificationManager covered by Vitest suite.
+

@@ -1,0 +1,117 @@
+{
+  "nav": {
+    "dashboard": "Tablero",
+    "cabinet": "Botiquín",
+    "prescriptions": "Recetas",
+    "orders": "Pedidos y Seguimiento",
+    "savings": "Ahorros",
+    "dependents": "Dependientes",
+    "notifications": "Notificaciones",
+    "analytics": "Análisis",
+    "settings": "Configuración"
+  },
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "add": "Agregar",
+    "search": "Buscar",
+    "loading": "Cargando…",
+    "error": "Algo salió mal",
+    "empty": "No se encontraron elementos",
+    "confirm": "Confirmar",
+    "back": "Atrás",
+    "done": "Listo",
+    "submit": "Enviar",
+    "refresh": "Actualizar",
+    "viewAll": "Ver Todo",
+    "learnMore": "Saber Más"
+  },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "register": "Crear Cuenta",
+    "logout": "Cerrar Sesión",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "name": "Nombre Completo",
+    "welcomeBack": "¡Bienvenido de nuevo, {{name}}!"
+  },
+  "dashboard": {
+    "title": "Horario de Medicamentos de Hoy",
+    "adherenceRate": "Tasa de Adherencia",
+    "activeMeds": "Medicamentos Activos",
+    "dosesRemaining": "Dosis Restantes",
+    "markTaken": "Marcar Tomado",
+    "markSkipped": "Marcar Omitido",
+    "morning": "Mañana",
+    "afternoon": "Tarde",
+    "evening": "Noche",
+    "bedtime": "Hora de Dormir"
+  },
+  "cabinet": {
+    "title": "Botiquín de Medicamentos",
+    "addMedication": "Agregar Medicamento",
+    "daysLeft": "{{count}} días restantes",
+    "pillsLeft": "{{count}} pastillas",
+    "refillsLeft": "{{count}} recargas",
+    "lowSupply": "Suministro Bajo",
+    "requestRefill": "Solicitar Recarga"
+  },
+  "prescriptions": {
+    "title": "Recetas Médicas",
+    "uploadRx": "Subir Receta",
+    "active": "Activa",
+    "pendingRenewal": "Renovación Pendiente",
+    "expiringSoon": "Por Vencer",
+    "transferred": "Transferida"
+  },
+  "orders": {
+    "title": "Pedidos y Seguimiento",
+    "orderNumber": "Pedido #{{number}}",
+    "trackDelivery": "Rastrear Entrega",
+    "reorder": "Volver a Pedir"
+  },
+  "savings": {
+    "title": "Ahorros con Genéricos",
+    "youSave": "Ahorras {{pct}}%",
+    "brandPrice": "Precio de Marca",
+    "genericPrice": "Precio Genérico"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "markAllRead": "Marcar Todo Como Leído",
+    "unread": "{{count}} sin leer"
+  },
+  "analytics": {
+    "title": "Adherencia y Análisis",
+    "overallAdherence": "Adherencia General",
+    "currentStreak": "Racha Actual",
+    "dosesTaken": "Dosis Tomadas",
+    "refillForecast": "Pronóstico de Recarga",
+    "days": "{{count}} días",
+    "streakDays": "Racha de {{count}} días"
+  },
+  "settings": {
+    "title": "Configuración",
+    "profile": "Perfil",
+    "preferences": "Preferencias",
+    "theme": "Tema",
+    "language": "Idioma",
+    "autoRefill": "Recarga Automática",
+    "genericSubstitution": "Sustitución Genérica",
+    "smsDoseReminders": "Recordatorios SMS",
+    "twoFactorAuth": "Autenticación de Dos Factores"
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
+  },
+  "language": {
+    "en": "English",
+    "es": "Español",
+    "hi": "हिन्दी"
+  }
+}
