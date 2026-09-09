@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   X,
   User,
@@ -35,11 +35,19 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   onNavigate,
   onLogout,
 }) => {
-  if (!isOpen) return null;
-
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<UserProfile>({ ...user });
   const [savedSuccess, setSavedSuccess] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({ ...user });
+      setIsEditing(false);
+      setSavedSuccess(false);
+    }
+  }, [isOpen, user]);
+
+  if (!isOpen) return null;
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,6 +83,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
           </div>
           <button
             id="close-profile-modal-btn"
+            aria-label="Close profile"
             onClick={onClose}
             className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
           >

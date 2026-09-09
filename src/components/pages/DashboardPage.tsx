@@ -49,6 +49,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   onOpenUploadRx,
   onOpenAddMed,
 }) => {
+  const todayLabel = new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(new Date());
   // Filter doses and meds based on activeDependent
   const filteredDoses = activeDependent
     ? todayDoses.filter((d) => d.dependentId === activeDependent.id)
@@ -59,9 +65,17 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     : medications;
 
   const lowSupplyMeds = filteredMeds.filter((m) => m.isLowSupply);
+  const lowSupplyDate = lowSupplyMeds[0]
+    ? new Date(Date.now() + lowSupplyMeds[0].daysSupplyLeft * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      })
+    : null;
 
   // Active delivery
   const activeOrder = orders.find((o) => o.status === 'Out for Delivery') || orders[0];
+  const linkedNames = dependents.filter((dependent) => dependent.relationship !== 'Self').map((dependent) => dependent.name.split(' ')[0]);
 
   // Dose stats
   const totalDoses = filteredDoses.length;
@@ -77,7 +91,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             <span className="text-xs font-bold text-teal-800 uppercase tracking-wider px-2 py-0.5 rounded bg-teal-50 border border-teal-200">
               {activeDependent ? `${activeDependent.relationship} Profile` : 'Caregiver Overview'}
             </span>
-            <span className="text-xs text-slate-500">Monday, September 7, 2026</span>
+            <span className="text-xs text-slate-500">{todayLabel}</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1.5">
             {activeDependent
@@ -89,7 +103,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-xl">
             {activeDependent
               ? `You have ${filteredDoses.length} scheduled doses today. All generic prescriptions are backed by FDA AB-ratings.`
-              : 'Unified view across Eleanor, Arthur (Father), and Leo (Son). Caregiver synchronization active.'}
+              : `Unified view across ${linkedNames.length ? linkedNames.join(', ') : 'your linked family members'}. Caregiver synchronization active.`}
           </p>
         </div>
 
@@ -135,7 +149,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               </div>
               <p className="text-xs text-amber-900/80 mt-0.5">
                 Supply runs out on{' '}
-                <span className="font-semibold">{lowSupplyMeds[0].nextRefillRecommendedDate}</span>.
+                <span className="font-semibold">{lowSupplyDate}</span>.
                 Bioequivalent generic refill available with free next-day cold-chain shipping.
               </p>
             </div>
@@ -191,11 +205,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </div>
           <div className="mt-3">
             <div className="text-base sm:text-lg font-black text-slate-900 leading-tight">
-              Today by 2:15 PM
+              {activeOrder?.estimatedDelivery ?? 'No deliveries scheduled'}
             </div>
             <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 mt-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-              Out for Delivery
+              <span className={`w-1.5 h-1.5 rounded-full ${activeOrder ? 'bg-emerald-500 animate-ping' : 'bg-slate-400'}`}></span>
+              {activeOrder?.status ?? 'All caught up'}
             </span>
           </div>
           <div className="mt-2 flex items-center text-[11px] text-slate-500 group-hover:text-teal-700 font-medium">
@@ -396,6 +410,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
         {/* Live Delivery Spotlight Card (1 Col) */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col justify-between space-y-4">
+          {activeOrder ? (
+            <>
           <div>
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
@@ -459,6 +475,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             <span>Open Real-Time Delivery Map</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
+            </>
+          ) : (
+            <div className="py-12 text-center">
+              <Truck className="w-8 h-8 text-slate-300 mx-auto" />
+              <h3 className="text-sm font-bold text-slate-900 mt-3">No active deliveries</h3>
+              <p className="text-xs text-slate-500 mt-1">New refill orders will appear here when they are on the way.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

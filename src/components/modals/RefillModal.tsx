@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   X,
   Pill,
@@ -36,6 +36,16 @@ export const RefillModal: React.FC<RefillModalProps> = ({
   const [isSuccess, setIsSuccess] = useState(false);
   const [generatedOrderNumber, setGeneratedOrderNumber] = useState('');
 
+  useEffect(() => {
+    if (isOpen) {
+      setSupplyChoice('90');
+      setAddressChoice(recipientAddress);
+      setIsProcessing(false);
+      setIsSuccess(false);
+      setGeneratedOrderNumber('');
+    }
+  }, [isOpen, medication?.id, recipientAddress]);
+
   if (!isOpen || !medication) return null;
 
   const is90Day = supplyChoice === '90';
@@ -43,6 +53,7 @@ export const RefillModal: React.FC<RefillModalProps> = ({
   const brandCostEquivalent = is90Day ? medication.priceBrand : Number((medication.priceBrand * 0.38).toFixed(2));
   const savings = Number((brandCostEquivalent - genericCost).toFixed(2));
   const qtyPills = is90Day ? 90 : 30;
+  const canRefill = medication.refillsRemaining > 0;
 
   const handlePlaceOrder = () => {
     setIsProcessing(true);
@@ -116,6 +127,7 @@ export const RefillModal: React.FC<RefillModalProps> = ({
           </div>
           <button
             id="close-refill-modal-btn"
+            aria-label="Close refill request"
             onClick={onClose}
             className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100"
           >
@@ -202,9 +214,11 @@ export const RefillModal: React.FC<RefillModalProps> = ({
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   {/* 90-Day Supply (Recommended) */}
-                  <div
+                  <button
+                    type="button"
+                    aria-pressed={supplyChoice === '90'}
                     onClick={() => setSupplyChoice('90')}
-                    className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                    className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all text-left ${
                       supplyChoice === '90'
                         ? 'border-teal-700 bg-teal-50/40 shadow-xs'
                         : 'border-slate-200 hover:border-slate-300 bg-white'
@@ -228,12 +242,14 @@ export const RefillModal: React.FC<RefillModalProps> = ({
                     <span className="text-[10px] text-emerald-700 font-semibold block mt-0.5">
                       Save ${(medication.priceBrand - medication.priceGeneric).toFixed(2)} (95%)
                     </span>
-                  </div>
+                  </button>
 
                   {/* 30-Day Supply */}
-                  <div
+                  <button
+                    type="button"
+                    aria-pressed={supplyChoice === '30'}
                     onClick={() => setSupplyChoice('30')}
-                    className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                    className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all text-left ${
                       supplyChoice === '30'
                         ? 'border-teal-700 bg-teal-50/40 shadow-xs'
                         : 'border-slate-200 hover:border-slate-300 bg-white'
@@ -254,7 +270,7 @@ export const RefillModal: React.FC<RefillModalProps> = ({
                     <span className="text-[10px] text-emerald-700 font-semibold block mt-0.5">
                       Save ${(medication.priceBrand * 0.38 - medication.priceGeneric * 0.4).toFixed(2)}
                     </span>
-                  </div>
+                  </button>
                 </div>
               </div>
 
@@ -323,16 +339,24 @@ export const RefillModal: React.FC<RefillModalProps> = ({
                 </div>
               </div>
 
+              {!canRefill && (
+                <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900">
+                  This prescription has no refills remaining. Contact the prescriber to request a renewal before placing another order.
+                </div>
+              )}
+
               {/* Action Button */}
               <div className="pt-1">
                 <button
                   id="confirm-refill-dispatch-btn"
                   onClick={handlePlaceOrder}
-                  disabled={isProcessing}
+                  disabled={isProcessing || !canRefill}
                   className="w-full py-3 px-4 rounded-xl bg-teal-700 hover:bg-teal-800 active:bg-teal-900 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50"
                 >
                   {isProcessing ? (
                     <span>Routing to Pharmacy Fulfillment...</span>
+                  ) : !canRefill ? (
+                    <span>Prescription Renewal Required</span>
                   ) : (
                     <>
                       <ShieldCheck className="w-4 h-4" />

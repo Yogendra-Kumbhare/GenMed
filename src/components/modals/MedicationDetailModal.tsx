@@ -66,6 +66,7 @@ export const MedicationDetailModal: React.FC<MedicationDetailModalProps> = ({
             </div>
           </div>
           <button
+            aria-label="Close medication details"
             onClick={onClose}
             className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-200/60"
           >

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { X, Plus, Pill, ShieldCheck, Heart } from 'lucide-react';
 import { Medication, Dependent } from '../../types';
 
@@ -23,17 +23,35 @@ export const AddMedicationModal: React.FC<AddMedicationModalProps> = ({
   const [name, setName] = useState('');
   const [strength, setStrength] = useState('');
   const [brandEquivalent, setBrandEquivalent] = useState('');
-  const [form, setForm] = useState<'Tablet' | 'Capsule' | 'Inhaler' | 'Solution'>('Tablet');
+  const [form, setForm] = useState<'Tablet' | 'Capsule' | 'Inhaler' | 'Solution' | 'Liquid'>('Tablet');
   const [frequency, setFrequency] = useState('Once daily (Morning)');
   const [pillsRemaining, setPillsRemaining] = useState('30');
   const [doctor, setDoctor] = useState('Dr. Sarah Chen, MD');
   const [instructions, setInstructions] = useState('Take with a glass of water');
   const [isAsNeeded, setIsAsNeeded] = useState(false);
 
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedDependent(activeDependentId === 'all' ? dependents[0]?.id || 'dep-self' : activeDependentId);
+    }
+  }, [isOpen, activeDependentId, dependents]);
+
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const supply = Math.max(1, parseInt(pillsRemaining, 10) || 30);
+    const timing: Medication['timing'] = isAsNeeded
+      ? ['As Needed']
+      : frequency.includes('Afternoon')
+        ? ['Afternoon']
+        : frequency.includes('Evening')
+          ? ['Evening']
+          : frequency.includes('Bedtime')
+            ? ['Bedtime']
+            : ['Morning'];
+    const refillDate = new Date();
+    refillDate.setDate(refillDate.getDate() + supply);
     const newMed: Medication = {
       id: `med-${Date.now()}`,
       dependentId: selectedDependent,
@@ -46,17 +64,17 @@ export const AddMedicationModal: React.FC<AddMedicationModalProps> = ({
       bioequivalenceRating: 'AB',
       dosageInstructions: instructions,
       frequency: frequency,
-      timing: frequency.includes('Morning') ? ['Morning'] : ['Evening'],
+      timing,
       prescribingDoctor: doctor,
       doctorClinic: 'Austin Regional Care',
       rxNumber: `RX-${Math.floor(100000 + Math.random() * 900000)}`,
-      pillsRemaining: parseInt(pillsRemaining) || 30,
-      totalPills: 90,
-      daysSupplyLeft: parseInt(pillsRemaining) || 30,
+      pillsRemaining: supply,
+      totalPills: supply,
+      daysSupplyLeft: supply,
       refillsRemaining: 3,
       lastRefillDate: new Date().toISOString().split('T')[0],
-      nextRefillRecommendedDate: '2026-10-07',
-      isLowSupply: (parseInt(pillsRemaining) || 30) <= 7,
+      nextRefillRecommendedDate: refillDate.toISOString().split('T')[0],
+      isLowSupply: supply <= 7,
       isAsNeeded: isAsNeeded,
       color: '#ffffff',
       shape: 'round',
@@ -92,6 +110,7 @@ export const AddMedicationModal: React.FC<AddMedicationModalProps> = ({
             </div>
           </div>
           <button
+            aria-label="Close add medication form"
             onClick={onClose}
             className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100"
           >
@@ -165,13 +184,14 @@ export const AddMedicationModal: React.FC<AddMedicationModalProps> = ({
               </label>
               <select
                 value={form}
-                onChange={(e) => setForm(e.target.value as any)}
+                onChange={(e) => setForm(e.target.value as typeof form)}
                 className="w-full px-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg focus:border-teal-700 focus:outline-none"
               >
                 <option value="Tablet">Tablet</option>
                 <option value="Capsule">Capsule</option>
                 <option value="Inhaler">Inhaler</option>
                 <option value="Solution">Solution</option>
+                <option value="Liquid">Liquid</option>
               </select>
             </div>
           </div>

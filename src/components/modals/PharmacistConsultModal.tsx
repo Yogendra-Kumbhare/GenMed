@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   X,
   PhoneCall,
@@ -23,6 +23,13 @@ export const PharmacistConsultModal: React.FC<PharmacistConsultModalProps> = ({
   const [question, setQuestion] = useState('');
   const [phone, setPhone] = useState('(512) 555-0112');
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setQuestion('');
+      setIsSubmitted(false);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -52,6 +59,7 @@ export const PharmacistConsultModal: React.FC<PharmacistConsultModalProps> = ({
             </div>
           </div>
           <button
+            aria-label="Close pharmacist consultation"
             onClick={onClose}
             className="text-teal-200 hover:text-white p-1 rounded-lg"
           >

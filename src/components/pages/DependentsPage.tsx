@@ -13,7 +13,7 @@ import {
   ExternalLink,
   Lock,
   X,
-  Plus,
+  Trash2,
 } from 'lucide-react';
 import { Dependent, Medication, PageId } from '../../types';
 
@@ -24,6 +24,7 @@ interface DependentsPageProps {
   onSelectDependent: (id: string | 'all') => void;
   onNavigate: (page: PageId) => void;
   onAddDependent: (newDep: Dependent) => void;
+  onRemoveDependent: (dependentId: string) => void;
 }
 
 export const DependentsPage: React.FC<DependentsPageProps> = ({
@@ -33,6 +34,7 @@ export const DependentsPage: React.FC<DependentsPageProps> = ({
   onSelectDependent,
   onNavigate,
   onAddDependent,
+  onRemoveDependent,
 }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newName, setNewName] = useState('');
@@ -40,6 +42,7 @@ export const DependentsPage: React.FC<DependentsPageProps> = ({
   const [newAge, setNewAge] = useState('74');
   const [newCondition, setNewCondition] = useState('Hypertension Management');
   const [newDoctor, setNewDoctor] = useState('Dr. Sarah Chen, MD');
+  const [dependentPendingRemoval, setDependentPendingRemoval] = useState<Dependent | null>(null);
 
   const handleAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,6 +68,12 @@ export const DependentsPage: React.FC<DependentsPageProps> = ({
     onAddDependent(newDep);
     setShowAddModal(false);
     setNewName('');
+  };
+
+  const handleRemoveDependent = () => {
+    if (!dependentPendingRemoval) return;
+    onRemoveDependent(dependentPendingRemoval.id);
+    setDependentPendingRemoval(null);
   };
 
   return (
@@ -244,6 +253,16 @@ export const DependentsPage: React.FC<DependentsPageProps> = ({
                 >
                   Manage {dep.name.split(' ')[0]}'s Portal
                 </button>
+                {dep.relationship !== 'Self' && (
+                  <button
+                    type="button"
+                    aria-label={`Remove ${dep.name} from your family members`}
+                    onClick={() => setDependentPendingRemoval(dep)}
+                    className="p-2 rounded-xl border border-red-200 text-red-700 hover:bg-red-50 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
           );
@@ -311,6 +330,7 @@ export const DependentsPage: React.FC<DependentsPageProps> = ({
                 <h3 className="text-sm font-bold text-slate-900">Link New Family Member / Care Recipient</h3>
               </div>
               <button
+                aria-label="Close add family member form"
                 onClick={() => setShowAddModal(false)}
                 className="text-slate-400 hover:text-slate-600 p-1"
               >
@@ -336,7 +356,7 @@ export const DependentsPage: React.FC<DependentsPageProps> = ({
                   <label className="block text-[11px] font-bold text-slate-700 mb-1">Relationship</label>
                   <select
                     value={newRelationship}
-                    onChange={(e) => setNewRelationship(e.target.value as any)}
+                    onChange={(e) => setNewRelationship(e.target.value as typeof newRelationship)}
                     className="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-lg focus:border-teal-700 focus:outline-none"
                   >
                     <option value="Mother">Mother</option>
@@ -402,6 +422,40 @@ export const DependentsPage: React.FC<DependentsPageProps> = ({
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {dependentPendingRemoval && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 p-6">
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-xl bg-red-50 text-red-700">
+                <Trash2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900">Remove family member?</h3>
+                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
+                  This removes {dependentPendingRemoval.name}'s profile and the related medications, doses, prescriptions, orders, and notifications from this local portal.
+                </p>
+              </div>
+            </div>
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setDependentPendingRemoval(null)}
+                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800"
+              >
+                Keep Member
+              </button>
+              <button
+                type="button"
+                onClick={handleRemoveDependent}
+                className="px-4 py-2 rounded-xl bg-red-700 hover:bg-red-800 text-white text-xs font-bold transition-colors"
+              >
+                Remove Member
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Menu, CheckCircle2, X } from 'lucide-react';
 import {
   PageId,
@@ -39,6 +39,15 @@ import { PharmacistConsultModal } from './components/modals/PharmacistConsultMod
 import { AuthScreen } from './components/auth/AuthScreen';
 import { ProfileModal } from './components/modals/ProfileModal';
 
+function readStoredState<T>(key: string, fallback: T): T {
+  try {
+    const stored = localStorage.getItem(key);
+    return stored ? (JSON.parse(stored) as T) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 export default function App() {
   // Authentication & Profile States
   const [currentUser, setCurrentUser] = useState<UserProfile>(() => {
@@ -76,12 +85,25 @@ export default function App() {
   const [globalSearch, setGlobalSearch] = useState('');
 
   // Core Data States with demo data
-  const [dependents, setDependents] = useState<Dependent[]>(INITIAL_DEPENDENTS);
-  const [medications, setMedications] = useState<Medication[]>(INITIAL_MEDICATIONS);
-  const [todayDoses, setTodayDoses] = useState<TodayDose[]>(INITIAL_TODAY_DOSES);
-  const [prescriptions, setPrescriptions] = useState<Prescription[]>(INITIAL_PRESCRIPTIONS);
-  const [orders, setOrders] = useState<Order[]>(INITIAL_ORDERS);
-  const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
+  const [dependents, setDependents] = useState<Dependent[]>(() => readStoredState('genericmed_dependents', INITIAL_DEPENDENTS));
+  const [medications, setMedications] = useState<Medication[]>(() => readStoredState('genericmed_medications', INITIAL_MEDICATIONS));
+  const [todayDoses, setTodayDoses] = useState<TodayDose[]>(() => readStoredState('genericmed_today_doses', INITIAL_TODAY_DOSES));
+  const [prescriptions, setPrescriptions] = useState<Prescription[]>(() => readStoredState('genericmed_prescriptions', INITIAL_PRESCRIPTIONS));
+  const [orders, setOrders] = useState<Order[]>(() => readStoredState('genericmed_orders', INITIAL_ORDERS));
+  const [notifications, setNotifications] = useState<NotificationItem[]>(() => readStoredState('genericmed_notifications', INITIAL_NOTIFICATIONS));
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('genericmed_dependents', JSON.stringify(dependents));
+      localStorage.setItem('genericmed_medications', JSON.stringify(medications));
+      localStorage.setItem('genericmed_today_doses', JSON.stringify(todayDoses));
+      localStorage.setItem('genericmed_prescriptions', JSON.stringify(prescriptions));
+      localStorage.setItem('genericmed_orders', JSON.stringify(orders));
+      localStorage.setItem('genericmed_notifications', JSON.stringify(notifications));
+    } catch {
+      // The portal remains usable if browser storage is unavailable.
+    }
+  }, [dependents, medications, todayDoses, prescriptions, orders, notifications]);
 
   // Modal States
   const [refillMedication, setRefillMedication] = useState<Medication | null>(null);
@@ -142,6 +164,7 @@ export default function App() {
 
   // Confirm and dispatch refill order
   const handleConfirmRefill = (newOrderData: Partial<Order>) => {
+    const refillQuantity = newOrderData.items?.[0]?.quantity ?? 90;
     const fullOrder: Order = {
       id: `ord-${Date.now()}`,
       orderNumber: newOrderData.orderNumber || `GM-${Math.floor(10000 + Math.random() * 90000)}`,
@@ -181,8 +204,8 @@ export default function App() {
           if (m.id === refillMedication.id) {
             return {
               ...m,
-              daysSupplyLeft: m.daysSupplyLeft + 90,
-              pillsRemaining: m.pillsRemaining + 90,
+              daysSupplyLeft: m.daysSupplyLeft + refillQuantity,
+              pillsRemaining: m.pillsRemaining + refillQuantity,
               isLowSupply: false,
               refillsRemaining: Math.max(0, m.refillsRemaining - 1),
             };
@@ -269,6 +292,18 @@ export default function App() {
   // Add Dependent
   const handleAddDependent = (newDep: Dependent) => {
     setDependents((prev) => [...prev, newDep]);
+  };
+
+  const handleRemoveDependent = (dependentId: string) => {
+    setDependents((prev) => prev.filter((dependent) => dependent.id !== dependentId));
+    setMedications((prev) => prev.filter((medication) => medication.dependentId !== dependentId));
+    setTodayDoses((prev) => prev.filter((dose) => dose.dependentId !== dependentId));
+    setPrescriptions((prev) => prev.filter((prescription) => prescription.dependentId !== dependentId));
+    setOrders((prev) => prev.filter((order) => order.dependentId !== dependentId));
+    setNotifications((prev) => prev.filter((notification) => notification.dependentId !== dependentId));
+    if (activeDependentId === dependentId) {
+      setActiveDependentId('all');
+    }
   };
 
   // Auth & Profile handlers
@@ -359,7 +394,7 @@ export default function App() {
 
   // Counts for sidebar badges
   const urgentRefillCount = medications.filter((m) => m.isLowSupply).length;
-  const activeOrdersCount = orders.filter((o) => o.status === 'Out for Delivery').length;
+  const activeOrdersCount = orders.filter((order) => order.status !== 'Delivered').length;
   const unreadNotifsCount = notifications.filter((n) => !n.isRead).length;
 
   // Unauthenticated view guard
@@ -532,6 +567,7 @@ export default function App() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               onAddDependent={handleAddDependent}
+              onRemoveDependent={handleRemoveDependent}
             />
           )}
 

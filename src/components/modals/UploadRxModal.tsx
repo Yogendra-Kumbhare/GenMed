@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   X,
   UploadCloud,
@@ -44,6 +44,15 @@ export const UploadRxModal: React.FC<UploadRxModalProps> = ({
   const [qty, setQty] = useState('90');
   const [refills, setRefills] = useState('3');
 
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedDependent(activeDependentId === 'all' ? dependents[0]?.id || 'dep-self' : activeDependentId);
+      setFileName(null);
+      setIsScanning(false);
+      setScanComplete(false);
+    }
+  }, [isOpen, activeDependentId, dependents]);
+
   if (!isOpen) return null;
 
   const handleSimulateFileSelect = (sampleName: string, med: string, str: string) => {
@@ -75,7 +84,7 @@ export const UploadRxModal: React.FC<UploadRxModalProps> = ({
       clinicAddress: '1200 Medical Pkwy, Austin, TX',
       clinicPhone: '(512) 555-0143',
       prescribedDate: new Date().toISOString().split('T')[0],
-      expirationDate: '2027-09-07',
+      expirationDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
       refillsTotal: parseInt(refills) || 3,
       refillsRemaining: parseInt(refills) || 3,
       status: 'Active',
@@ -113,6 +122,7 @@ export const UploadRxModal: React.FC<UploadRxModalProps> = ({
             </div>
           </div>
           <button
+            aria-label="Close prescription upload"
             onClick={onClose}
             className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100"
           >

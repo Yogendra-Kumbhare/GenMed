@@ -177,7 +177,7 @@ export const MedicineCabinetPage: React.FC<MedicineCabinetPageProps> = ({
             <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
               className="bg-transparent border-none text-xs font-semibold text-slate-700 focus:outline-none cursor-pointer"
             >
               <option value="days">Sort: Days Left</option>
