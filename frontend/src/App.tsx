@@ -89,13 +89,13 @@ export default function App() {
   const [activeDependentId, setActiveDependentId] = useState<string | 'all'>('dep-self');
   const [globalSearch, setGlobalSearch] = useState('');
 
-  // Core Data States with demo data
-  const [dependents, setDependents] = useState<Dependent[]>(() => readStoredState('genericmed_dependents', INITIAL_DEPENDENTS));
-  const [medications, setMedications] = useState<Medication[]>(() => readStoredState('genericmed_medications', INITIAL_MEDICATIONS));
-  const [todayDoses, setTodayDoses] = useState<TodayDose[]>(() => readStoredState('genericmed_today_doses', INITIAL_TODAY_DOSES));
-  const [prescriptions, setPrescriptions] = useState<Prescription[]>(() => readStoredState('genericmed_prescriptions', INITIAL_PRESCRIPTIONS));
-  const [orders, setOrders] = useState<Order[]>(() => readStoredState('genericmed_orders', INITIAL_ORDERS));
-  const [notifications, setNotifications] = useState<NotificationItem[]>(() => readStoredState('genericmed_notifications', INITIAL_NOTIFICATIONS));
+  // Core Data States with clean defaults (no fake mock data fallbacks)
+  const [dependents, setDependents] = useState<Dependent[]>(() => readStoredState('genericmed_dependents', []));
+  const [medications, setMedications] = useState<Medication[]>(() => readStoredState('genericmed_medications', []));
+  const [todayDoses, setTodayDoses] = useState<TodayDose[]>(() => readStoredState('genericmed_today_doses', []));
+  const [prescriptions, setPrescriptions] = useState<Prescription[]>(() => readStoredState('genericmed_prescriptions', []));
+  const [orders, setOrders] = useState<Order[]>(() => readStoredState('genericmed_orders', []));
+  const [notifications, setNotifications] = useState<NotificationItem[]>(() => readStoredState('genericmed_notifications', []));
 
   useEffect(() => {
     try {
@@ -346,7 +346,14 @@ export default function App() {
   const handleLogout = () => {
     setIsAuthenticated(false);
     try {
-      localStorage.setItem('genericmed_is_authenticated', 'false');
+      localStorage.removeItem('genericmed_current_user');
+      localStorage.removeItem('genericmed_is_authenticated');
+      localStorage.removeItem('genericmed_dependents');
+      localStorage.removeItem('genericmed_medications');
+      localStorage.removeItem('genericmed_today_doses');
+      localStorage.removeItem('genericmed_prescriptions');
+      localStorage.removeItem('genericmed_orders');
+      localStorage.removeItem('genericmed_notifications');
     } catch {
       // ignore
     }
